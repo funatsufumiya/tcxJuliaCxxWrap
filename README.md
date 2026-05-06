@@ -2,7 +2,8 @@
 
 TrussC Julia CxxWrap.jl binding generator
 
-***STATUS***: **WIP**. Unimplemented.
+> [!WARNING]
+> **Work In Progress**. Almost unimplemented.
 
 ## About
 
@@ -14,8 +15,10 @@ You need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` on cmake.
 
 Please see https://github.com/funatsufumiya/CxxWrapTest.jl in detail.
 
-**TODO**: Write detailed build instructions here
+> [!NOTE]
+> **TODO**: Write detailed build instructions here
 
 ## Usage from Julia
 
-**TODO**: Write this
+> [!NOTE]
+> **TODO**: Write this
