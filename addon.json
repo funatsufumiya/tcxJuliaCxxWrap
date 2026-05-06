@@ -1,6 +1,6 @@
 {
-  "description": "Pybind11 bridge for TrussC",
+  "description": "TrussC Julia CxxWrap.jl binding generator",
   "author": "Fumiya Funatsu",
-  "license": "MIT and other (combined)",
+  "license": "MIT",
   "keywords": ["language"]
 }
