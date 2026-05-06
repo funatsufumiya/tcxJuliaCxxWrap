@@ -2,13 +2,11 @@
 
 TrussC Julia CxxWrap.jl binding generator
 
+***STATUS***: **WIP**. Unimplemented.
+
 ## About
 
 This is not actual addon, but if you add this addon into empty project, `.dll`/`.so`/`.dylib` named JLTrussC (extension is depending on your platform) will be generated.
-
-## Status
-
-WIP. Unimplemented.
 
 ## Build Instruction
 
