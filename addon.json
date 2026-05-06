@@ -1,0 +1,6 @@
+{
+  "description": "Pybind11 bridge for TrussC",
+  "author": "Fumiya Funatsu",
+  "license": "MIT and other (combined)",
+  "keywords": ["language"]
+}

@@ -1,0 +1,57 @@
+# =============================================================================
+# tcxJuliaCxxWrap - TrussC Julia CxxWrap.jl binding generator
+# =============================================================================
+
+cmake_minimum_required(VERSION 3.16)
+# cmake_policy(SET CMP0077 NEW)
+
+find_package(JlCxx)
+get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
+get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
+
+message(STATUS "Found JlCxx at ${JlCxx_location}")
+
+set(ADDON_NAME tcxJuliaCxxWrap)
+set(SHARED_LIB_NAME JlTrussC)
+
+# file(GLOB ADDON_INCLUDE_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+file(GLOB ADDON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB ADDON_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
+
+target_link_libraries(greet JlCxx::cxxwrap_julia)
+
+add_library(${ADDON_NAME} STATIC
+    ${ADDON_SOURCES}
+    # ${ADDON_INCLUDE_HEADERS}
+    ${ADDON_HEADERS}
+)
+
+add_library(${SHARED_LIB_NAME} SHARED
+    ${ADDON_SOURCES}
+    # ${ADDON_INCLUDE_HEADERS}
+    ${ADDON_HEADERS}
+)
+
+# target_compile_definitions(${ADDON_NAME} PRIVATE A=1 B=1)
+target_include_directories(${ADDON_NAME} PUBLIC
+    # ${CMAKE_CURRENT_SOURCE_DIR}/other/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    # ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# target_compile_definitions(${SHARED_LIB_NAME} PRIVATE A=1 B=1)
+target_include_directories(${SHARED_LIB_NAME} PUBLIC
+    # ${CMAKE_CURRENT_SOURCE_DIR}/other/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    # ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# if(WIN32 AND MSVC)
+#     # MSVC on Windows: enable large object support to avoid
+#     # "too many sections" (/bigobj)
+#     target_compile_options(${ADDON_NAME} PRIVATE /bigobj)
+# endif()
+
+target_link_libraries(${ADDON_NAME} PUBLIC TrussC)
+target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC)
