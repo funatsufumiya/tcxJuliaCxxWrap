@@ -1,8 +1,10 @@
+#define TRUSSC_SHOW_CONSOLE 1
+#include "TrussC.h"
+
 #include "JlTrussC.h"
 
 #include "jlcxx/jlcxx.hpp"
 
-#include "TrussC.h"
 using namespace std;
 using namespace tc;
 
@@ -22,7 +24,7 @@ void runTrusscTestApp() {
     WindowSettings settings;
     settings.setSize(960, 600);
     settings.setTitle("TrussC");
-    return runApp<TestApp>(settings);
+    runApp<TestApp>(settings);
 }
 
 std::string greet()
@@ -34,4 +36,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 {
   mod.method("greet", &greet);
   mod.method("runTrusscTestApp", &runTrusscTestApp);
+}
+
+int main(){
+
 }
