@@ -8,6 +8,8 @@
 using namespace std;
 using namespace tc;
 
+static void *setupFnPtr;
+
 class TestApp : public App {
     void draw() override {
         clear(0.12f);
@@ -27,6 +29,22 @@ void runTrusscTestApp() {
     runApp<TestApp>(settings);
 }
 
+void setSetupFn(jl_value_t *fn){
+    setupFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void callFnPtr(void* ptr){
+    if(ptr != nullptr){
+        typedef void (*CppPtr)();
+        CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
+        rePtr();
+    }
+}
+
+void callSetupFn(){
+    callFnPtr(setupFnPtr);
+}
+
 std::string greet()
 {
    return "Hello from JlTrussC C++!!";
@@ -36,4 +54,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 {
   mod.method("greet", &greet);
   mod.method("runTrusscTestApp", &runTrusscTestApp);
+  mod.method("setSetupFn", &setSetupFn);
+  mod.method("callSetupFn", &callSetupFn);
 }
