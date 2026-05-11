@@ -24,6 +24,15 @@ Please see https://github.com/funatsufumiya/CxxWrapTest.jl in detail.
 > [!NOTE]
 > **TODO**: Write detailed build instructions here
 
+### In case of Linux -fPIC error
+
+You may need the line below after `add_library(TrussC STATIC ${TC_ALL_SOURCES})` on `TrussC/core/CMakeLists.txt` (maybe line at 120 around.)
+
+```cmake
+# Fix error of -fPIC linux dll
+set_property(TARGET TrussC PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+```
+
 ## Usage from Julia
 
 > [!NOTE]
