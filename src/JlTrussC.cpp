@@ -8,7 +8,9 @@
 using namespace std;
 using namespace tc;
 
-static void *setupFnPtr;
+static void *setupFnPtr = nullptr;
+static void *updateFnPtr = nullptr;
+static void *drawFnPtr = nullptr;
 
 class TestApp : public App {
     void draw() override {
@@ -33,6 +35,14 @@ void setSetupFn(jl_value_t *fn){
     setupFnPtr = jl_unbox_voidpointer(fn);
 }
 
+void setUpdateFn(jl_value_t *fn){
+    updateFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setDrawFn(jl_value_t *fn){
+    drawFnPtr = jl_unbox_voidpointer(fn);
+}
+
 void callFnPtr(void* ptr){
     if(ptr != nullptr){
         typedef void (*CppPtr)();
@@ -43,6 +53,14 @@ void callFnPtr(void* ptr){
 
 void callSetupFn(){
     callFnPtr(setupFnPtr);
+}
+
+void callUpdateFn(){
+    callFnPtr(updateFnPtr);
+}
+
+void callDrawFn(){
+    callFnPtr(drawFnPtr);
 }
 
 std::string greet()
@@ -56,4 +74,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("runTrusscTestApp", &runTrusscTestApp);
   mod.method("setSetupFn", &setSetupFn);
   mod.method("callSetupFn", &callSetupFn);
+  mod.method("setUpdateFn", &setUpdateFn);
+  mod.method("callUpdateFn", &callUpdateFn);
+  mod.method("setDrawFn", &setDrawFn);
+  mod.method("callDrawFn", &callDrawFn);
 }
