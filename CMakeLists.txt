@@ -19,8 +19,6 @@ set(SHARED_LIB_NAME JlTrussC)
 file(GLOB ADDON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB ADDON_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 
-target_link_libraries(greet JlCxx::cxxwrap_julia)
-
 add_library(${ADDON_NAME} STATIC
     ${ADDON_SOURCES}
     # ${ADDON_INCLUDE_HEADERS}
@@ -53,5 +51,5 @@ target_include_directories(${SHARED_LIB_NAME} PUBLIC
 #     target_compile_options(${ADDON_NAME} PRIVATE /bigobj)
 # endif()
 
-target_link_libraries(${ADDON_NAME} PUBLIC TrussC)
-target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC)
+target_link_libraries(${ADDON_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
+target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
