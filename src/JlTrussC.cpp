@@ -5,6 +5,8 @@
 
 #include "jlcxx/jlcxx.hpp"
 
+#include "trussc_generated.h"
+
 using namespace std;
 using namespace tc;
 
@@ -158,4 +160,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("callKeyPressedFn", &callKeyPressedFn);
   mod.method("setKeyReleasedFn", &setKeyReleasedFn);
   mod.method("callKeyReleasedFn", &callKeyReleasedFn);
+
+  define_julia_module_trussc_generated(mod);
 }

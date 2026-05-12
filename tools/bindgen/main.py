@@ -9,10 +9,9 @@ genfile = "trussc_generated.cpp"
 prev = """
 // WARNING: This file is auto-generated!
 
-#include "tcxLua.h"
+#include "trussc_generated.h"
 #include "TrussC.h"
 
-#include "sol/sol.hpp"
 using namespace tc;
 
 // WORKAROUND: to support deprecated functions in lua
@@ -23,7 +22,7 @@ using namespace tc;
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif // #ifndef _MSC_VER
 
-void tcxLua::setTrussCGeneratedBindings(const std::shared_ptr<sol::state>& lua){
+JLCXX_MODULE define_julia_module_trussc_generated(jlcxx::Module& mod){
 """
 
 after = """
@@ -244,13 +243,13 @@ def bindFunctions(outfile, fn_map):
 
                 id = name if ns == "" else ns + "::" + name
                 if len(arg_names) == 0:
-                    outfile.write(f"    lua->set_function(\"{name}\", [](){lp} {ret} {id}(); {rp});\n")
+                    outfile.write(f"    mod.method(\"{name}\", [](){lp} {ret} {id}(); {rp});\n")
                 else:
                     # outfile.write(f"// args: {arg_names}\n")
                     # outfile.write(f"// args: {", ".join(arg_pairs)}\n")
                     sarg = ", ".join(arg_pairs) 
                     narg = ", ".join(arg_names) 
-                    outfile.write(f"    lua->set_function(\"{name}\", []({sarg}){lp} {ret} {id}({narg}); {rp});\n")
+                    outfile.write(f"    mod.method(\"{name}\", []({sarg}){lp} {ret} {id}({narg}); {rp});\n")
         else:
 
             # outfile.write(f"    // overloads: {overloads_count}\n")
@@ -292,12 +291,11 @@ def bindFunctions(outfile, fn_map):
 
             if additional_overloads_count > 0:
                 for s in additional_overloads_strs:
-                    overloads.append(f"// NOTE: additional overloads provided by user")
-                    overloads.append(f"{s}")
+                    overloads.append(f"{s} /* NOTE: additional overloads provided by user */")
 
             if fn_name != "":
-                overload_fns = ",\n        ".join(overloads)
-                outfile.write(f"    lua->set_function(\"{name}\", sol::overload(\n        {overload_fns}\n    ));\n")
+                for fn in overloads:
+                    outfile.write(f"    mod.method(\"{name}\", {fn});\n")
 
 def main():
     parser = argparse.ArgumentParser()
