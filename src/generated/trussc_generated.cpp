@@ -1,8 +1,10 @@
 
 // WARNING: This file is auto-generated!
 
-#include "trussc_generated.h"
+#define TRUSSC_SHOW_CONSOLE 1
 #include "TrussC.h"
+
+#include "trussc_generated.h"
 
 using namespace tc;
 
