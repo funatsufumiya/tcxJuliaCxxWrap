@@ -166,6 +166,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("setKeyReleasedFn", &setKeyReleasedFn);
   mod.method("callKeyReleasedFn", &callKeyReleasedFn);
 
+  mod.method("getElapsedTimef", &getElapsedTime);
+
   mod.add_type<Vec2>("Vec2")
     .constructor<>()
     .constructor<float, float>()
