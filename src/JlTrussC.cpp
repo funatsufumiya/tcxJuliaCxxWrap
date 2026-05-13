@@ -194,6 +194,15 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         float, float, float, float>()
     .constructor<const Mat4&>();
 
+  mod.add_type<Rect>("Rect")
+    .constructor<>()
+    .constructor<float, float, float, float>()
+    .constructor<float, float, float, float, float>()
+    .constructor<const Vec2&, float, float>()
+    .constructor<const Vec3&, float, float>()
+    .constructor<const Rect&>()
+    ;
+
   mod.add_type<Color>("Color")
     .constructor<>()
     .constructor<float>()
@@ -201,6 +210,13 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .constructor<float, float, float>()
     .constructor<float, float, float, float>()
     .constructor<const Color&>();
+
+  mod.add_type<LogStream>("LogStream");
+
+//   mod.add_type<LogStream>("LogStream")
+//     .constructor<LogLevel>()
+//     .constructor<LogLevel, const std::string&>()
+//     ;
 
   mod.add_enum<LogLevel>("LogLevel",
     std::vector<const char*>({
@@ -259,6 +275,111 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)TextureWrap::ClampToEdge,
         (int)TextureWrap::MirroredRepeat
     }));
+
+  mod.add_enum<StrokeCap>("StrokeCap",
+    std::vector<const char*>({
+        "Butt",
+        "Round",
+        "Square"
+    }),
+    std::vector<int>({
+        (int)StrokeCap::Butt,
+        (int)StrokeCap::Round,
+        (int)StrokeCap::Square
+    }));
+
+  mod.add_enum<StrokeJoin>("StrokeJoin",
+    std::vector<const char*>({
+        "Miter",
+        "Round",
+        "Bevel"
+    }),
+    std::vector<int>({
+        (int)StrokeJoin::Miter,
+        (int)StrokeJoin::Round,
+        (int)StrokeJoin::Bevel
+    }));
+
+  mod.add_enum<Direction>("Direction",
+    std::vector<const char*>({
+        "Left",
+        "Center",
+        "Right",
+        "Top",
+        "Bottom",
+        "Baseline"
+    }),
+    std::vector<int>({
+        (int)Direction::Left,
+        (int)Direction::Center,
+        (int)Direction::Right,
+        (int)Direction::Top,
+        (int)Direction::Bottom,
+        (int)Direction::Baseline
+    }));
+
+  mod.add_enum<Cursor>("Cursor",
+    std::vector<const char*>({
+        "Default",
+        "Arrow",
+        "IBeam",
+        "Crosshair",
+        "Hand",
+        "ResizeEW",
+        "ResizeNS",
+        "ResizeNWSE",
+        "ResizeNESW",
+        "ResizeAll",
+        "NotAllowed",
+        "Custom0",
+        "Custom1",
+        "Custom2",
+        "Custom3",
+        "Custom4",
+        "Custom5",
+        "Custom6",
+        "Custom7",
+        "Custom8",
+        "Custom9",
+        "Custom10",
+        "Custom11",
+        "Custom12",
+        "Custom13",
+        "Custom14",
+        "Custom15"
+    }),
+    std::vector<int>({
+        (int)Cursor::Default,
+        (int)Cursor::Arrow,
+        (int)Cursor::IBeam,
+        (int)Cursor::Crosshair,
+        (int)Cursor::Hand,
+        (int)Cursor::ResizeEW,
+        (int)Cursor::ResizeNS,
+        (int)Cursor::ResizeNWSE,
+        (int)Cursor::ResizeNESW,
+        (int)Cursor::ResizeAll,
+        (int)Cursor::NotAllowed,
+        (int)Cursor::Custom0,
+        (int)Cursor::Custom1,
+        (int)Cursor::Custom2,
+        (int)Cursor::Custom3,
+        (int)Cursor::Custom4,
+        (int)Cursor::Custom5,
+        (int)Cursor::Custom6,
+        (int)Cursor::Custom7,
+        (int)Cursor::Custom8,
+        (int)Cursor::Custom9,
+        (int)Cursor::Custom10,
+        (int)Cursor::Custom11,
+        (int)Cursor::Custom12,
+        (int)Cursor::Custom13,
+        (int)Cursor::Custom14,
+        (int)Cursor::Custom15
+    }));
+
+  mod.add_type<Image>("Image")
+    .constructor<>(); // FIXME: move constructor?
 
   mod.add_type<Shader>("Shader")
     .constructor<>(); // FIXME: move constructor?
