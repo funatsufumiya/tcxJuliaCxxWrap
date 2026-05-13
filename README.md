@@ -1,6 +1,6 @@
 # tcxJuliaCxxWrap
 
-TrussC Julia [CxxWrap.jl](https://github.com/JuliaInterop/CxxWrap.jl) binding generator
+[TrussC](https://trussc.org/) Julia [CxxWrap.jl](https://github.com/JuliaInterop/CxxWrap.jl) binding generator
 
 ## About
 
