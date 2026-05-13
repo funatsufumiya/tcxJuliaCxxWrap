@@ -216,6 +216,24 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .constructor<float, float, float, float>()
     .constructor<const Color&>();
 
+  mod.add_type<Pixels>("Pixels")
+    .constructor<>() // FIXME: move constructor?
+    ;
+
+  mod.add_type<Mesh>("Mesh")
+    .constructor<>()
+    .constructor<const Mesh&>()
+    // FIXME: move constructor?
+    ;
+
+  mod.add_type<Light>("Light")
+    .constructor<>()
+    ;
+
+  mod.add_type<Material>("Material")
+    .constructor<>()
+    ;
+
   mod.add_type<LogStream>("LogStream");
 
   mod.add_type<FpsSettings>("FpsSettings");
