@@ -10,7 +10,7 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 
 Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon.
 
-You need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` on cmake.
+On cmake configure, you need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx`.
 
 ```bash
 # for example, in buildJuliaProject (especially after project generator = trusscli )
