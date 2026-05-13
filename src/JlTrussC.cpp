@@ -161,5 +161,37 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("setKeyReleasedFn", &setKeyReleasedFn);
   mod.method("callKeyReleasedFn", &callKeyReleasedFn);
 
+  mod.add_type<Vec2>("Vec2")
+    .constructor<>()
+    .constructor<float, float>()
+    .constructor<const Vec2&>();
+    // .method("x", &Vec2::x)
+    // .method("y", &Vec2::y);
+
+  mod.add_type<Vec3>("Vec3")
+    .constructor<>()
+    .constructor<float, float, float>()
+    .constructor<const Vec3&>();
+    // .method("x", &Vec2::x)
+    // .method("y", &Vec2::y);
+
+  mod.add_enum<LogLevel>("LogLevel",
+    std::vector<const char*>({
+        "Verbose",
+        "Notice",
+        "Warning",
+        "Error",
+        "Fatal",
+        "Silent"
+    }),
+    std::vector<int>({
+        (int)LogLevel::Verbose,
+        (int)LogLevel::Notice,
+        (int)LogLevel::Warning,
+        (int)LogLevel::Error,
+        (int)LogLevel::Fatal,
+        (int)LogLevel::Silent
+    }));
+
   define_julia_module_trussc_generated(mod);
 }
