@@ -50,8 +50,6 @@ JLCXX_MODULE define_julia_module_trussc_generated(jlcxx::Module& mod){
     mod.method("angleDifference", [](float angle1, float angle2){ return trussc::angleDifference(angle1, angle2); });
     // tcMath.h, LINE 1060
     mod.method("angleDifferenceDeg", [](float deg1, float deg2){ return trussc::angleDifferenceDeg(deg1, deg2); });
-    // tcMath.h, LINE 1073
-    mod.method("getRandomEngine", [](){ return trussc::internal::getRandomEngine(); });
     // tcMath.h, LINE 1080
     // tcMath.h, LINE 1086
     // tcMath.h, LINE 1092
