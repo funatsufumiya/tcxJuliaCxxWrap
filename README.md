@@ -6,6 +6,12 @@ TrussC Julia [CxxWrap.jl](https://github.com/JuliaInterop/CxxWrap.jl) binding ge
 
 This is not actual addon, but if you add this addon into empty project, `.dll`/`.so`/`.dylib` named JLTrussC (extension is depending on your platform) will be generated.
 
+## Binding coverage
+
+### Dones
+
+- Basic trussc functions
+
 ## Build Instruction
 
 Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon.
