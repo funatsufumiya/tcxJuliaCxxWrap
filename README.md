@@ -19,7 +19,7 @@ $ cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH=C:/Users
 $ cmake --build build --parallel 8 -j 8 --config Release
 ```
 
-After cmake build, `libJlTrussC.dll` / `libJlTrussc.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
+After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
 More information about `JlCxx` build, please see https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/CxxWrap.jl in detail.
 
