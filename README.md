@@ -21,7 +21,7 @@ $ cmake --build build --parallel 8 -j 8 --config Release
 
 After cmake build, `libJlTrussC.dll` / `libJlTrussc.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
-Please see https://github.com/funatsufumiya/CxxWrapTest.jl in detail.
+More information about `JlCxx` build, please see https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/CxxWrap.jl in detail.
 
 > [!NOTE]
 > **TODO**: Write detailed build instructions here
