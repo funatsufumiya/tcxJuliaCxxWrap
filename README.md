@@ -8,6 +8,8 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 
 ## Build Instruction
 
+Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon.
+
 You need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` on cmake.
 
 ```bash
@@ -16,6 +18,8 @@ You need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` on cmake.
 $ cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH=C:/Users/fu/.julia/dev/libcxxwrap_julia_jll/override -DJulia_EXECUTABLE=C:/Users/fu/AppData/Local/Microsoft/WindowsApps/julia.exe
 $ cmake --build build --parallel 8 -j 8 --config Release
 ```
+
+After cmake build, `libJlTrussC.dll` / `libJlTrussc.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
 Please see https://github.com/funatsufumiya/CxxWrapTest.jl in detail.
 
