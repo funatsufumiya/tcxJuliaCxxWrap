@@ -175,6 +175,33 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     // .method("x", &Vec2::x)
     // .method("y", &Vec2::y);
 
+  mod.add_type<Vec4>("Vec4")
+    .constructor<>()
+    .constructor<float, float, float, float>()
+    .constructor<const Vec4&>();
+
+  mod.add_type<Quaternion>("Quaternion")
+    .constructor<>()
+    .constructor<float, float, float, float>()
+    .constructor<const Quaternion&>();
+
+  mod.add_type<Mat4>("Mat4")
+    .constructor<>()
+    .constructor<
+        float, float, float, float,
+        float, float, float, float,
+        float, float, float, float,
+        float, float, float, float>()
+    .constructor<const Mat4&>();
+
+  mod.add_type<Color>("Color")
+    .constructor<>()
+    .constructor<float>()
+    .constructor<float, float>()
+    .constructor<float, float, float>()
+    .constructor<float, float, float, float>()
+    .constructor<const Color&>();
+
   mod.add_enum<LogLevel>("LogLevel",
     std::vector<const char*>({
         "Verbose",
