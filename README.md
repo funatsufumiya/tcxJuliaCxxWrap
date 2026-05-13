@@ -2,9 +2,6 @@
 
 TrussC Julia CxxWrap.jl binding generator
 
-> [!WARNING]
-> **Work In Progress**. Almost unimplemented.
-
 ## About
 
 This is not actual addon, but if you add this addon into empty project, `.dll`/`.so`/`.dylib` named JLTrussC (extension is depending on your platform) will be generated.
@@ -35,5 +32,21 @@ set_property(TARGET TrussC PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
 ## Usage from Julia
 
+see https://github.com/funatsufumiya/JlTrussCTest.jl/
+
 > [!NOTE]
-> **TODO**: Write this
+> **TODO**: Write in detail
+
+## Development
+
+### Bindgen
+
+Please read [tools/bindgen/README.md](tools/bindgen/README.md) in detail.
+
+```bash
+$ cd tools/bingen
+# $ pip install uv # only at first time
+# $ uv sync # only at first time
+$ uv run main.py ../../../../core/include/TrussC.h
+$ cp trussc_generated.cpp ../../src/generated
+```
