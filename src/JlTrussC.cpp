@@ -220,5 +220,48 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)LogLevel::Silent
     }));
 
+  mod.add_enum<BlendMode>("BlendMode",
+    std::vector<const char*>({
+        "Alpha",
+        "Add",
+        "Multiply",
+        "Screen",
+        "Subtract",
+        "Disabled"
+    }),
+    std::vector<int>({
+        (int)BlendMode::Alpha,
+        (int)BlendMode::Add,
+        (int)BlendMode::Multiply,
+        (int)BlendMode::Screen,
+        (int)BlendMode::Subtract,
+        (int)BlendMode::Disabled
+    }));
+
+  mod.add_enum<TextureFilter>("TextureFilter",
+    std::vector<const char*>({
+        "Nearest",
+        "Linear"
+    }),
+    std::vector<int>({
+        (int)TextureFilter::Nearest,
+        (int)TextureFilter::Linear
+    }));
+
+  mod.add_enum<TextureWrap>("TextureWrap",
+    std::vector<const char*>({
+        "Repeat",
+        "ClampToEdge",
+        "MirroredRepeat"
+    }),
+    std::vector<int>({
+        (int)TextureWrap::Repeat,
+        (int)TextureWrap::ClampToEdge,
+        (int)TextureWrap::MirroredRepeat
+    }));
+
+  mod.add_type<Shader>("Shader")
+    .constructor<>(); // FIXME: move constructor?
+
   define_julia_module_trussc_generated(mod);
 }
