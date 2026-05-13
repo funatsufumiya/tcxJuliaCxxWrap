@@ -141,6 +141,11 @@ std::string greet()
    return "Hello from JlTrussC C++!!";
 }
 
+namespace jlcxx
+{
+  template<> struct IsMirroredType<FpsSettings> : std::false_type { };
+}
+
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 {
   mod.method("greet", &greet);
@@ -212,6 +217,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .constructor<const Color&>();
 
   mod.add_type<LogStream>("LogStream");
+
+  mod.add_type<FpsSettings>("FpsSettings");
 
 //   mod.add_type<LogStream>("LogStream")
 //     .constructor<LogLevel>()
@@ -377,6 +384,26 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)Cursor::Custom14,
         (int)Cursor::Custom15
     }));
+
+    mod.add_enum<Orientation>("Orientation",
+        std::vector<const char*>({
+            "Portrait",
+            "PortraitUpsideDown",
+            "LandscapeLeft",
+            "LandscapeRight",
+            "Landscape",
+            "All",
+            "AllButUpsideDown"
+        }),
+        std::vector<uint32_t>({
+            (int)Orientation::Portrait,
+            (int)Orientation::PortraitUpsideDown,
+            (int)Orientation::LandscapeLeft,
+            (int)Orientation::LandscapeRight,
+            (int)Orientation::Landscape,
+            (int)Orientation::All,
+            (int)Orientation::AllButUpsideDown
+        }));
 
   mod.add_type<Image>("Image")
     .constructor<>(); // FIXME: move constructor?
