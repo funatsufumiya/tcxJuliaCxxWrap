@@ -22,6 +22,7 @@ static void *mouseDraggedFnPtr = nullptr;
 static void *mouseScrolledFnPtr = nullptr;
 static void *windowResizedFnPtr = nullptr;
 static void *filesDroppedFnPtr = nullptr;
+static void *exitFnPtr = nullptr;
 
 class TestApp : public App {
     void draw() override {
@@ -88,6 +89,10 @@ void setWindowResizedFn(jl_value_t *fn){
 
 void setFilesDroppedFn(jl_value_t *fn){
     filesDroppedFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setExitFn(jl_value_t *fn){
+    exitFnPtr = jl_unbox_voidpointer(fn);
 }
 
 void callFnPtr(void* ptr){
@@ -186,6 +191,10 @@ void callFilesDroppedFn(const vector<string>& files){
     callFilesDroppedFnPtr(filesDroppedFnPtr, files);
 }
 
+void callExitFn(){
+    callFnPtr(exitFnPtr);
+}
+
 class MyApp : public App {
 public:
 
@@ -239,6 +248,10 @@ public:
     void filesDropped(const vector<string>& files) override {
         callFilesDroppedFn(files);
     }
+
+    void exit() override {
+        callExitFn();
+    }
 };
 
 void runTrusscApp(int width=960, int height=600, const std::string& title="TrussC") {
@@ -279,6 +292,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("setMouseDraggedFn", &setMouseDraggedFn);
   mod.method("setWindowResizedFn", &setWindowResizedFn);
   mod.method("setFilesDroppedFn", &setFilesDroppedFn);
+  mod.method("setExitFn", &setExitFn);
 
   mod.method("getElapsedTimef", &getElapsedTime);
 
@@ -327,6 +341,23 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("set", [](Vec3& v, float a, float b, float c){ return v.set(a,b,c); })
     .method("set!", [](Vec3& v, const Vec3& a){ return v.set(a); })
     .method("set!", [](Vec3& v, float a, float b, float c){ return v.set(a,b,c); })
+    .method("add", [](Vec3& v, const Vec3& p){ return v + p; })
+    .method("mul", [](Vec3& v, const Vec3& p){ return v * p; })
+    .method("div", [](Vec3& v, const Vec3& p){ return v / p; })
+    .method("sub", [](Vec3& v, const Vec3& p){ return v - p; })
+    .method("add", [](Vec3& v, float p){ return v + p; })
+    .method("mul", [](Vec3& v, float p){ return v * p; })
+    .method("div", [](Vec3& v, float p){ return v / p; })
+    .method("sub", [](Vec3& v, float p){ return v - p; })
+    .method("add", [](Vec3& v, int p){ return v + p; })
+    .method("mul", [](Vec3& v, int p){ return v * p; })
+    .method("div", [](Vec3& v, int p){ return v / p; })
+    .method("sub", [](Vec3& v, int p){ return v - p; })
+    .method("add", [](Vec3& v, double p){ return v + p; })
+    .method("mul", [](Vec3& v, double p){ return v * p; })
+    .method("div", [](Vec3& v, double p){ return v / p; })
+    .method("sub", [](Vec3& v, double p){ return v - p; })
+    .method("eq", [](Vec3& v, const Vec3& p){ return v == p; })
     ;
 
   mod.add_type<Vec4>("Vec4")
@@ -345,6 +376,21 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("set", [](Vec4& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
     .method("set!", [](Vec4& v, const Vec4& a){ return v.set(a); })
     .method("set!", [](Vec4& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
+    .method("add", [](Vec4& v, const Vec4& p){ return v + p; })
+    .method("sub", [](Vec4& v, const Vec4& p){ return v - p; })
+    .method("add", [](Vec4& v, float p){ return v + p; })
+    .method("mul", [](Vec4& v, float p){ return v * p; })
+    .method("div", [](Vec4& v, float p){ return v / p; })
+    .method("sub", [](Vec4& v, float p){ return v - p; })
+    .method("add", [](Vec4& v, int p){ return v + p; })
+    .method("mul", [](Vec4& v, int p){ return v * p; })
+    .method("div", [](Vec4& v, int p){ return v / p; })
+    .method("sub", [](Vec4& v, int p){ return v - p; })
+    .method("add", [](Vec4& v, double p){ return v + p; })
+    .method("mul", [](Vec4& v, double p){ return v * p; })
+    .method("div", [](Vec4& v, double p){ return v / p; })
+    .method("sub", [](Vec4& v, double p){ return v - p; })
+    .method("eq", [](Vec4& v, const Vec4& p){ return v == p; })
     ;
 
   mod.add_type<Quaternion>("Quaternion")
@@ -359,6 +405,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("x!", [](Quaternion& v, float p){ v.x = p; })
     .method("y!", [](Quaternion& v, float p){ v.y = p; })
     .method("z!", [](Quaternion& v, float p){ v.z = p; })
+    .method("eq", [](Quaternion& v, const Quaternion& p){ return v == p; })
     ;
 
   mod.add_type<Mat4>("Mat4")
@@ -372,6 +419,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("at", [](Mat4& m, int raw, int col) { return m.at(raw, col); })
     .method("set", [](Mat4& m, int raw, int col, int v){ m.at(raw, col) = v; })
     .method("set!", [](Mat4& m, int raw, int col, int v){ m.at(raw, col) = v; })
+    .method("mul", [](Mat4& v, const Mat4& p){ return v * p; })
+    .method("mul", [](Mat4& v, const Vec4& p){ return v * p; })
+    .method("mul", [](Mat4& v, const Vec3& p){ return v * p; })
     ;
 
   mod.add_type<Rect>("Rect")
