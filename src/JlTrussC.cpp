@@ -15,6 +15,8 @@ static void *updateFnPtr = nullptr;
 static void *drawFnPtr = nullptr;
 static void *keyPressedFnPtr = nullptr;
 static void *keyReleasedFnPtr = nullptr;
+static void *mousePressedFnPtr = nullptr;
+static void *mouseReleasedFnPtr = nullptr;
 
 class TestApp : public App {
     void draw() override {
@@ -55,6 +57,14 @@ void setKeyReleasedFn(jl_value_t *fn){
     keyReleasedFnPtr = jl_unbox_voidpointer(fn);
 }
 
+void setMousePressedFn(jl_value_t *fn){
+    mousePressedFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setMouseReleasedFn(jl_value_t *fn){
+    mouseReleasedFnPtr = jl_unbox_voidpointer(fn);
+}
+
 void callFnPtr(void* ptr){
     if(ptr != nullptr){
         typedef void (*CppPtr)();
@@ -68,6 +78,22 @@ void callKeyFnPtr(void* ptr, int key){
         typedef void (*CppPtr)(int key);
         CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
         rePtr(key);
+    }
+}
+
+void callMouseFnPtr(void* ptr, Vec2 pos, int button){
+    if(ptr != nullptr){
+        typedef void (*CppPtr)(Vec2& pos, int button);
+        CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
+        rePtr(pos, button);
+    }
+}
+
+void callMouseMovedFnPtr(void* ptr, Vec2 pos){
+    if(ptr != nullptr){
+        typedef void (*CppPtr)(Vec2& pos);
+        CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
+        rePtr(pos);
     }
 }
 
@@ -89,6 +115,14 @@ void callKeyPressedFn(int key){
 
 void callKeyReleasedFn(int key){
     callKeyFnPtr(keyReleasedFnPtr, key);
+}
+
+void callMousePressedFn(Vec2 pos, int button){
+    callMouseFnPtr(mousePressedFnPtr, pos, button);
+}
+
+void callMouseReleasedFn(Vec2 pos, int button){
+    callMouseFnPtr(mouseReleasedFnPtr, pos, button);
 }
 
 class MyApp : public App {
@@ -113,10 +147,10 @@ class MyApp : public App {
     }
 
     void mousePressed(Vec2 pos, int button) override {
-
+        callMousePressedFn(pos, button);
     }
     void mouseReleased(Vec2 pos, int button) override {
-
+        callMouseReleasedFn(pos, button);
     }
     void mouseMoved(Vec2 pos) override {
 
@@ -156,15 +190,12 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("runTrusscApp", [](){ runTrusscApp(); });
   mod.method("runTrusscApp", [](int w, int h){ runTrusscApp(w, h); });
   mod.method("setSetupFn", &setSetupFn);
-  mod.method("callSetupFn", &callSetupFn);
   mod.method("setUpdateFn", &setUpdateFn);
-  mod.method("callUpdateFn", &callUpdateFn);
   mod.method("setDrawFn", &setDrawFn);
-  mod.method("callDrawFn", &callDrawFn);
   mod.method("setKeyPressedFn", &setKeyPressedFn);
-  mod.method("callKeyPressedFn", &callKeyPressedFn);
   mod.method("setKeyReleasedFn", &setKeyReleasedFn);
-  mod.method("callKeyReleasedFn", &callKeyReleasedFn);
+  mod.method("setMousePressedFn", &setMousePressedFn);
+  mod.method("setMouseReleasedFn", &setMouseReleasedFn);
 
   mod.method("getElapsedTimef", &getElapsedTime);
 
