@@ -2,6 +2,8 @@
 
 [TrussC](https://trussc.org/) Julia [CxxWrap.jl](https://github.com/JuliaInterop/CxxWrap.jl) binding generator
 
+This addon is used to create [TrussC.jl](https://github.com/funatsufumiya/TrussC.jl) package.
+
 ## About
 
 This is not actual addon, but if you add this addon into empty project, `.dll`/`.so`/`.dylib` named JLTrussC (extension is depending on your platform) will be generated.
