@@ -171,21 +171,50 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.add_type<Vec2>("Vec2")
     .constructor<>()
     .constructor<float, float>()
-    .constructor<const Vec2&>();
-    // .method("x", &Vec2::x)
-    // .method("y", &Vec2::y);
+    .constructor<const Vec2&>()
+    .method("x", [](Vec2& v){ return v.x; })
+    .method("y", [](Vec2& v){ return v.y; })
+    .method("x!", [](Vec2& v, float p){ v.x = p; })
+    .method("y!", [](Vec2& v, float p){ v.y = p; })
+    .method("set", [](Vec2& v, const Vec2& a){ return v.set(a); })
+    .method("set", [](Vec2& v, float a, float b){ return v.set(a,b); })
+    .method("set!", [](Vec2& v, const Vec2& a){ return v.set(a); })
+    .method("set!", [](Vec2& v, float a, float b){ return v.set(a,b); })
+    ;
 
   mod.add_type<Vec3>("Vec3")
     .constructor<>()
     .constructor<float, float, float>()
-    .constructor<const Vec3&>();
-    // .method("x", &Vec2::x)
-    // .method("y", &Vec2::y);
+    .constructor<const Vec3&>()
+    .method("x", [](Vec3& v){ return v.x; })
+    .method("y", [](Vec3& v){ return v.y; })
+    .method("z", [](Vec3& v){ return v.z; })
+    .method("x!", [](Vec3& v, float p){ v.x = p; })
+    .method("y!", [](Vec3& v, float p){ v.y = p; })
+    .method("z!", [](Vec3& v, float p){ v.z = p; })
+    .method("set", [](Vec3& v, const Vec3& a){ return v.set(a); })
+    .method("set", [](Vec3& v, float a, float b, float c){ return v.set(a,b,c); })
+    .method("set!", [](Vec3& v, const Vec3& a){ return v.set(a); })
+    .method("set!", [](Vec3& v, float a, float b, float c){ return v.set(a,b,c); })
+    ;
 
   mod.add_type<Vec4>("Vec4")
     .constructor<>()
     .constructor<float, float, float, float>()
-    .constructor<const Vec4&>();
+    .constructor<const Vec4&>()
+    .method("x", [](Vec4& v){ return v.x; })
+    .method("y", [](Vec4& v){ return v.y; })
+    .method("z", [](Vec4& v){ return v.z; })
+    .method("w", [](Vec4& v){ return v.w; })
+    .method("x!", [](Vec4& v, float p){ v.x = p; })
+    .method("y!", [](Vec4& v, float p){ v.y = p; })
+    .method("z!", [](Vec4& v, float p){ v.z = p; })
+    .method("w!", [](Vec4& v, float p){ v.w = p; })
+    .method("set", [](Vec4& v, const Vec4& a){ return v.set(a); })
+    .method("set", [](Vec4& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
+    .method("set!", [](Vec4& v, const Vec4& a){ return v.set(a); })
+    .method("set!", [](Vec4& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
+    ;
 
   mod.add_type<Quaternion>("Quaternion")
     .constructor<>()
