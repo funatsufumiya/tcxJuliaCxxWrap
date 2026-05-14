@@ -17,6 +17,9 @@ static void *keyPressedFnPtr = nullptr;
 static void *keyReleasedFnPtr = nullptr;
 static void *mousePressedFnPtr = nullptr;
 static void *mouseReleasedFnPtr = nullptr;
+static void *mouseMovedFnPtr = nullptr;
+static void *mouseDraggedFnPtr = nullptr;
+static void *mouseScrolledFnPtr = nullptr;
 
 class TestApp : public App {
     void draw() override {
@@ -63,6 +66,18 @@ void setMousePressedFn(jl_value_t *fn){
 
 void setMouseReleasedFn(jl_value_t *fn){
     mouseReleasedFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setMouseMovedFn(jl_value_t *fn){
+    mouseMovedFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setMouseScrolledFn(jl_value_t *fn){
+    mouseScrolledFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setMouseDraggedFn(jl_value_t *fn){
+    mouseDraggedFnPtr = jl_unbox_voidpointer(fn);
 }
 
 void callFnPtr(void* ptr){
@@ -125,7 +140,21 @@ void callMouseReleasedFn(Vec2 pos, int button){
     callMouseFnPtr(mouseReleasedFnPtr, pos, button);
 }
 
+void callMouseMovedFn(Vec2 pos){
+    callMouseMovedFnPtr(mouseMovedFnPtr, pos);
+}
+
+void callMouseScrolledFn(Vec2 delta){
+    callMouseMovedFnPtr(mouseScrolledFnPtr, delta);
+}
+
+void callMouseDraggedFn(Vec2 pos, int button){
+    callMouseFnPtr(mouseDraggedFnPtr, pos, button);
+}
+
 class MyApp : public App {
+public:
+
     void setup() override {
         callSetupFn();
     }
@@ -149,16 +178,30 @@ class MyApp : public App {
     void mousePressed(Vec2 pos, int button) override {
         callMousePressedFn(pos, button);
     }
+
     void mouseReleased(Vec2 pos, int button) override {
         callMouseReleasedFn(pos, button);
     }
+
     void mouseMoved(Vec2 pos) override {
+        callMouseMovedFn(pos);
 
     }
+
     void mouseDragged(Vec2 pos, int button) override {
+        callMouseDraggedFn(pos, button);
 
     }
+
     void mouseScrolled(Vec2 delta) override {
+        callMouseScrolledFn(delta);
+    }
+
+    void windowResized(int width, int height) override {
+
+    }
+
+    void filesDropped(const vector<string>& files) override {
 
     }
 };
@@ -196,6 +239,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("setKeyReleasedFn", &setKeyReleasedFn);
   mod.method("setMousePressedFn", &setMousePressedFn);
   mod.method("setMouseReleasedFn", &setMouseReleasedFn);
+  mod.method("setMouseMovedFn", &setMouseMovedFn);
+  mod.method("setMouseScrolledFn", &setMouseScrolledFn);
+  mod.method("setMouseDraggedFn", &setMouseDraggedFn);
 
   mod.method("getElapsedTimef", &getElapsedTime);
 
