@@ -20,6 +20,8 @@ static void *mouseReleasedFnPtr = nullptr;
 static void *mouseMovedFnPtr = nullptr;
 static void *mouseDraggedFnPtr = nullptr;
 static void *mouseScrolledFnPtr = nullptr;
+static void *windowResizedFnPtr = nullptr;
+static void *filesDroppedFnPtr = nullptr;
 
 class TestApp : public App {
     void draw() override {
@@ -80,6 +82,14 @@ void setMouseDraggedFn(jl_value_t *fn){
     mouseDraggedFnPtr = jl_unbox_voidpointer(fn);
 }
 
+void setWindowResizedFn(jl_value_t *fn){
+    windowResizedFnPtr = jl_unbox_voidpointer(fn);
+}
+
+void setFilesDroppedFn(jl_value_t *fn){
+    filesDroppedFnPtr = jl_unbox_voidpointer(fn);
+}
+
 void callFnPtr(void* ptr){
     if(ptr != nullptr){
         typedef void (*CppPtr)();
@@ -109,6 +119,22 @@ void callMouseMovedFnPtr(void* ptr, Vec2 pos){
         typedef void (*CppPtr)(Vec2& pos);
         CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
         rePtr(pos);
+    }
+}
+
+void callWindowResizedFnPtr(void* ptr, int w, int h){
+    if(ptr != nullptr){
+        typedef void (*CppPtr)(int w, int h);
+        CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
+        rePtr(w, h);
+    }
+}
+
+void callFilesDroppedFnPtr(void* ptr, const vector<string>& files){
+    if(ptr != nullptr){
+        typedef void (*CppPtr)(vector<string>& files);
+        CppPtr rePtr = reinterpret_cast<CppPtr>(ptr);
+        rePtr(const_cast<vector<string>&>(files));
     }
 }
 
@@ -150,6 +176,14 @@ void callMouseScrolledFn(Vec2 delta){
 
 void callMouseDraggedFn(Vec2 pos, int button){
     callMouseFnPtr(mouseDraggedFnPtr, pos, button);
+}
+
+void callWindowResizedFn(int w, int h){
+    callWindowResizedFnPtr(windowResizedFnPtr, w, h);
+}
+
+void callFilesDroppedFn(const vector<string>& files){
+    callFilesDroppedFnPtr(filesDroppedFnPtr, files);
 }
 
 class MyApp : public App {
@@ -198,11 +232,12 @@ public:
     }
 
     void windowResized(int width, int height) override {
+        callWindowResizedFn(width, height);
 
     }
 
     void filesDropped(const vector<string>& files) override {
-
+        callFilesDroppedFn(files);
     }
 };
 
@@ -242,6 +277,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("setMouseMovedFn", &setMouseMovedFn);
   mod.method("setMouseScrolledFn", &setMouseScrolledFn);
   mod.method("setMouseDraggedFn", &setMouseDraggedFn);
+  mod.method("setWindowResizedFn", &setWindowResizedFn);
+  mod.method("setFilesDroppedFn", &setFilesDroppedFn);
 
   mod.method("getElapsedTimef", &getElapsedTime);
 
