@@ -1183,7 +1183,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("getSampler", &Fbo::getSampler)
     ;
 
-  auto&& pixels_type = mod.add_type<Pixels>("Pixels")
+  auto pixels_type = mod.add_type<Pixels>("Pixels")
     .constructor<>() // FIXME: move constructor?
     ;
 
