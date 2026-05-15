@@ -273,6 +273,7 @@ namespace jlcxx
   template<> struct IsMirroredType<sg_image> : std::false_type { };
   template<> struct IsMirroredType<sg_view> : std::false_type { };
   template<> struct IsMirroredType<sg_sampler> : std::false_type { };
+//   template<> struct IsMirroredType<sg_pixel_format> : std::false_type { };
 }
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
@@ -823,6 +824,151 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   auto&& sg_image_type = mod.add_type<sg_image>("sg_image");
   auto&& sg_view_type = mod.add_type<sg_view>("sg_view");
   auto&& sg_sampler_type = mod.add_type<sg_sampler>("sg_sampler");
+  mod.add_enum<sg_pixel_format>("sg_pixel_format",
+        std::vector<const char*>({
+            "_SG_PIXELFORMAT_DEFAULT",
+            "SG_PIXELFORMAT_NONE",
+            "SG_PIXELFORMAT_R8",
+            "SG_PIXELFORMAT_R8SN",
+            "SG_PIXELFORMAT_R8UI",
+            "SG_PIXELFORMAT_R8SI",
+            "SG_PIXELFORMAT_R16",
+            "SG_PIXELFORMAT_R16SN",
+            "SG_PIXELFORMAT_R16UI",
+            "SG_PIXELFORMAT_R16SI",
+            "SG_PIXELFORMAT_R16F",
+            "SG_PIXELFORMAT_RG8",
+            "SG_PIXELFORMAT_RG8SN",
+            "SG_PIXELFORMAT_RG8UI",
+            "SG_PIXELFORMAT_RG8SI",
+            "SG_PIXELFORMAT_R32UI",
+            "SG_PIXELFORMAT_R32SI",
+            "SG_PIXELFORMAT_R32F",
+            "SG_PIXELFORMAT_RG16",
+            "SG_PIXELFORMAT_RG16SN",
+            "SG_PIXELFORMAT_RG16UI",
+            "SG_PIXELFORMAT_RG16SI",
+            "SG_PIXELFORMAT_RG16F",
+            "SG_PIXELFORMAT_RGBA8",
+            "SG_PIXELFORMAT_SRGB8A8",
+            "SG_PIXELFORMAT_RGBA8SN",
+            "SG_PIXELFORMAT_RGBA8UI",
+            "SG_PIXELFORMAT_RGBA8SI",
+            "SG_PIXELFORMAT_BGRA8",
+            "SG_PIXELFORMAT_RGB10A2",
+            "SG_PIXELFORMAT_RG11B10F",
+            "SG_PIXELFORMAT_RGB9E5",
+            "SG_PIXELFORMAT_RG32UI",
+            "SG_PIXELFORMAT_RG32SI",
+            "SG_PIXELFORMAT_RG32F",
+            "SG_PIXELFORMAT_RGBA16",
+            "SG_PIXELFORMAT_RGBA16SN",
+            "SG_PIXELFORMAT_RGBA16UI",
+            "SG_PIXELFORMAT_RGBA16SI",
+            "SG_PIXELFORMAT_RGBA16F",
+            "SG_PIXELFORMAT_RGBA32UI",
+            "SG_PIXELFORMAT_RGBA32SI",
+            "SG_PIXELFORMAT_RGBA32F",
+            "SG_PIXELFORMAT_DEPTH",
+            "SG_PIXELFORMAT_DEPTH_STENCIL",
+            "SG_PIXELFORMAT_BC1_RGBA",
+            "SG_PIXELFORMAT_BC2_RGBA",
+            "SG_PIXELFORMAT_BC3_RGBA",
+            "SG_PIXELFORMAT_BC3_SRGBA",
+            "SG_PIXELFORMAT_BC4_R",
+            "SG_PIXELFORMAT_BC4_RSN",
+            "SG_PIXELFORMAT_BC5_RG",
+            "SG_PIXELFORMAT_BC5_RGSN",
+            "SG_PIXELFORMAT_BC6H_RGBF",
+            "SG_PIXELFORMAT_BC6H_RGBUF",
+            "SG_PIXELFORMAT_BC7_RGBA",
+            "SG_PIXELFORMAT_BC7_SRGBA",
+            "SG_PIXELFORMAT_ETC2_RGB8",
+            "SG_PIXELFORMAT_ETC2_SRGB8",
+            "SG_PIXELFORMAT_ETC2_RGB8A1",
+            "SG_PIXELFORMAT_ETC2_RGBA8",
+            "SG_PIXELFORMAT_ETC2_SRGB8A8",
+            "SG_PIXELFORMAT_EAC_R11",
+            "SG_PIXELFORMAT_EAC_R11SN",
+            "SG_PIXELFORMAT_EAC_RG11",
+            "SG_PIXELFORMAT_EAC_RG11SN",
+            "SG_PIXELFORMAT_ASTC_4x4_RGBA",
+            "SG_PIXELFORMAT_ASTC_4x4_SRGBA",
+            "_SG_PIXELFORMAT_NUM",
+        }),
+        std::vector<int>({
+            (int)sg_pixel_format::_SG_PIXELFORMAT_DEFAULT,
+            (int)sg_pixel_format::SG_PIXELFORMAT_NONE,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R8SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R8UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R8SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R16,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R16SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R16UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R16SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R16F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG8SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG8UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG8SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R32UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R32SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_R32F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG16,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG16SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG16UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG16SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG16F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_SRGB8A8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA8SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA8UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA8SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BGRA8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGB10A2,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG11B10F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGB9E5,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG32UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG32SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RG32F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA16,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA16SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA16UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA16SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA16F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA32UI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA32SI,
+            (int)sg_pixel_format::SG_PIXELFORMAT_RGBA32F,
+            (int)sg_pixel_format::SG_PIXELFORMAT_DEPTH,
+            (int)sg_pixel_format::SG_PIXELFORMAT_DEPTH_STENCIL,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC1_RGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC2_RGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC3_RGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC3_SRGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC4_R,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC4_RSN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC5_RG,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC5_RGSN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC6H_RGBF,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC6H_RGBUF,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC7_RGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_BC7_SRGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ETC2_RGB8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ETC2_SRGB8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ETC2_RGB8A1,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ETC2_RGBA8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ETC2_SRGB8A8,
+            (int)sg_pixel_format::SG_PIXELFORMAT_EAC_R11,
+            (int)sg_pixel_format::SG_PIXELFORMAT_EAC_R11SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_EAC_RG11,
+            (int)sg_pixel_format::SG_PIXELFORMAT_EAC_RG11SN,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ASTC_4x4_RGBA,
+            (int)sg_pixel_format::SG_PIXELFORMAT_ASTC_4x4_SRGBA,
+            (int)sg_pixel_format::_SG_PIXELFORMAT_NUM,
+        })
+    );
+
 
   mod.add_type<Mesh>("Mesh")
     .constructor<>()
@@ -991,6 +1137,19 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
           (int)TextureFormat::RG32F
         }));
 
+    mod.add_enum<TextureUsage>("TextureUsage",
+        std::vector<const char*>({
+          "Immutable",
+          "Dynamic",
+          "Stream",
+          "RenderTarget"
+        }),
+        std::vector<int>({
+          (int)TextureUsage::Immutable,
+          (int)TextureUsage::Dynamic,
+          (int)TextureUsage::Stream,
+          (int)TextureUsage::RenderTarget
+        }));
 
   mod.add_type<Fbo>("Fbo")
     .constructor<>()
@@ -1024,8 +1183,86 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("getSampler", &Fbo::getSampler)
     ;
 
-  mod.add_type<Pixels>("Pixels")
+  auto&& pixels_type = mod.add_type<Pixels>("Pixels")
     .constructor<>() // FIXME: move constructor?
+    ;
+
+  mod.add_enum<TextureFilter>("TextureFilter",
+    std::vector<const char*>({
+        "Nearest",
+        "Linear"
+    }),
+    std::vector<int>({
+        (int)TextureFilter::Nearest,
+        (int)TextureFilter::Linear
+    }));
+
+  mod.add_enum<TextureWrap>("TextureWrap",
+    std::vector<const char*>({
+        "Repeat",
+        "ClampToEdge",
+        "MirroredRepeat"
+    }),
+    std::vector<int>({
+        (int)TextureWrap::Repeat,
+        (int)TextureWrap::ClampToEdge,
+        (int)TextureWrap::MirroredRepeat
+    }));
+
+  tex_type
+    .method("allocate", [](Texture& f, int w, int h){ return f.allocate(w, h); })
+    .method("allocate", [](Texture& f, int w, int h, int c){ return f.allocate(w, h, c); })
+    .method("allocate", [](Texture& f, int w, int h, int c, TextureUsage t){ return f.allocate(w, h, c, t); })
+    .method("allocate", [](Texture& f, int w, int h, int c, TextureUsage t, int s){ return f.allocate(w, h, c, t, s); })
+    .method("allocate", [](Texture& f, int w, int h, TextureFormat c){ return f.allocate(w, h, c); })
+    .method("allocate", [](Texture& f, int w, int h, TextureFormat c, TextureUsage t){ return f.allocate(w, h, c, t); })
+    .method("allocate", [](Texture& f, int w, int h, TextureFormat c, TextureUsage t, int s){ return f.allocate(w, h, c, t, s); })
+    .method("allocate", [](Texture& f, const Pixels& w){ return f.allocate(w); })
+    .method("allocate", [](Texture& f, const Pixels& w, TextureUsage c){ return f.allocate(w, c); })
+    .method("allocate", [](Texture& f, const Pixels& w, TextureUsage c, bool m){ return f.allocate(w, c, m); })
+    .method("allocateCubemap", [](Texture& f, int w, TextureFormat c){ return f.allocateCubemap(w, c); })
+    .method("allocateCubemap", [](Texture& f, int w, TextureFormat c, TextureUsage t){ return f.allocateCubemap(w, c, t); })
+    .method("allocateCubemap", [](Texture& f, int w, TextureFormat c, TextureUsage t, int s){ return f.allocateCubemap(w, c, t, s); })
+    .method("uploadCubemapFace", &Texture::uploadCubemapFace)
+    .method("uploadCubemapMip", &Texture::uploadCubemapMip)
+    .method("getCubemapFaceAttachmentView", &Texture::getCubemapFaceAttachmentView)
+    .method("isCubemap", &Texture::isCubemap)
+    .method("getNumMipLevels", &Texture::getNumMipLevels)
+    .method("allocateCompressed", &Texture::allocateCompressed)
+    .method("updateCompressed", &Texture::updateCompressed)
+    .method("isCompressed", &Texture::isCompressed)
+    .method("clear", &Texture::clear)
+    .method("isAllocated", &Texture::isAllocated)
+    .method("getWidth", &Texture::getWidth)
+    .method("getHeight", &Texture::getHeight)
+    .method("getChannels", &Texture::getChannels)
+    .method("getUsage", &Texture::getUsage)
+    .method("getSampleCount", &Texture::getSampleCount)
+    .method("getPixelFormat", &Texture::getPixelFormat)
+    .method("loadData", [](Texture& t, const Pixels& p){ return t.loadData(p); })
+    .method("loadData", [](Texture& t, const unsigned char* d, int w, int h, int c){ return t.loadData(d, w, h, c); })
+    .method("loadData", [](Texture& t, const void* d, int w, int h, int c){ return t.loadData(d, w, h, c); })
+    .method("setMinFilter", &Texture::setMinFilter)
+    .method("setMagFilter", &Texture::setMagFilter)
+    .method("setFilter", &Texture::setFilter)
+    .method("getMinFilter", &Texture::getMinFilter)
+    .method("getMagFilter", &Texture::getMagFilter)
+    .method("setPremultipliedAlpha", &Texture::setPremultipliedAlpha)
+    .method("isPremultipliedAlpha", &Texture::isPremultipliedAlpha)
+    .method("setWrapU", &Texture::setWrapU)
+    .method("setWrapV", &Texture::setWrapV)
+    .method("setWrap", &Texture::setWrap)
+    .method("getWrapU", &Texture::getWrapU)
+    .method("getWrapV", &Texture::getWrapV)
+    .method("draw", [](Texture& t, float x, float y){ return t.draw(x, y); })
+    .method("draw", [](Texture& t, float x, float y, float w, float h){ return t.draw(x, y, w, h); })
+    .method("drawSubsection", &Texture::drawSubsection)
+    .method("bind", &Texture::bind)
+    .method("unbind", &Texture::unbind)
+    .method("getImage", &Texture::getImage)
+    .method("getView", &Texture::getView)
+    .method("getSampler", &Texture::getSampler)
+    .method("getAttachmentView", &Texture::getAttachmentView)
     ;
 
   mod.add_type<Light>("Light")
@@ -1079,28 +1316,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)BlendMode::Screen,
         (int)BlendMode::Subtract,
         (int)BlendMode::Disabled
-    }));
-
-  mod.add_enum<TextureFilter>("TextureFilter",
-    std::vector<const char*>({
-        "Nearest",
-        "Linear"
-    }),
-    std::vector<int>({
-        (int)TextureFilter::Nearest,
-        (int)TextureFilter::Linear
-    }));
-
-  mod.add_enum<TextureWrap>("TextureWrap",
-    std::vector<const char*>({
-        "Repeat",
-        "ClampToEdge",
-        "MirroredRepeat"
-    }),
-    std::vector<int>({
-        (int)TextureWrap::Repeat,
-        (int)TextureWrap::ClampToEdge,
-        (int)TextureWrap::MirroredRepeat
     }));
 
   mod.add_enum<StrokeCap>("StrokeCap",
