@@ -13,6 +13,8 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 ### Dones
 
 - Basic trussc functions
+- Vec, IVec, Mat, Quaternion
+- Mesh, Fbo
 
 ## Build Instruction
 
