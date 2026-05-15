@@ -467,7 +467,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("xy", &Vec4::xy)
     ;
 
-  mod.add_type<Quaternion>("Quaternion")
+  auto&& quat_type = mod.add_type<Quaternion>("Quaternion")
     .constructor<>()
     .constructor<float, float, float, float>()
     .constructor<const Quaternion&>()
@@ -480,22 +480,25 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("y!", [](Quaternion& v, float p){ v.y = p; })
     .method("z!", [](Quaternion& v, float p){ v.z = p; })
     .method("eq", [](Quaternion& v, const Quaternion& p){ return v == p; })
-    .method("identity", [](){ return Quaternion::identity(); })
-    .method("fromAxisAngle", [](const Vec3& a, float b){ return Quaternion::fromAxisAngle(a, b); })
-    .method("fromEuler", [](float pitch, float yaw, float roll){ return Quaternion::fromEuler(pitch, yaw, roll); })
-    .method("fromEuler", [](const Vec3& euler){ return Quaternion::fromEuler(euler); })
+    // .method("identity", [](){ return Quaternion::identity(); })
     .method("toEuler", &Quaternion::toEuler)
-    .method("toMatrix", &Quaternion::toMatrix)
     .method("length", &Quaternion::length)
     .method("lengthSquared", &Quaternion::lengthSquared)
     .method("normalized", &Quaternion::normalized)
     .method("normalize", &Quaternion::normalize)
     .method("conjugate", &Quaternion::conjugate)
     .method("rotate", &Quaternion::rotate)
-    .method("slerp", [](const Quaternion& a, const Quaternion& b, float t) { return Quaternion::slerp(a, b, t); })
     ;
 
-  mod.add_type<Mat4>("Mat4")
+  // WORKAROUND
+  mod.method("Quaternion_identity", [](){ return Quaternion::identity(); });
+  mod.method("Quaternion_fromAxisAngle", [](const Vec3& a, float b){ return Quaternion::fromAxisAngle(a, b); });
+  mod.method("Quaternion_fromEuler", [](float pitch, float yaw, float roll){ return Quaternion::fromEuler(pitch, yaw, roll); });
+  mod.method("Quaternion_fromEuler", [](const Vec3& euler){ return Quaternion::fromEuler(euler); });
+  mod.method("Quaternion_slerp", [](const Quaternion& a, const Quaternion& b, float t) { return Quaternion::slerp(a, b, t); });
+    ;
+
+  auto&& mat4_type = mod.add_type<Mat4>("Mat4")
     .constructor<>()
     .constructor<
         float, float, float, float,
@@ -509,24 +512,29 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("mul", [](Mat4& v, const Mat4& p){ return v * p; })
     .method("mul", [](Mat4& v, const Vec4& p){ return v * p; })
     .method("mul", [](Mat4& v, const Vec3& p){ return v * p; })
-    .method("identity", [](){ return Mat4::identity(); })
-    .method("fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); })
-    .method("translate", [](float tx, float ty, float tz){ return Mat4::translate(tx, ty, tz); })
-    .method("translate", [](const Vec3& t){ return Mat4::translate(t); })
-    .method("rotateX", [](float r){ return Mat4::rotateX(r); })
-    .method("rotateY", [](float r){ return Mat4::rotateY(r); })
-    .method("rotateZ", [](float r){ return Mat4::rotateZ(r); })
-    .method("rotate", [](float r, const Vec3& a){ return Mat4::rotate(r, a); })
-    .method("scale", [](float s){ return Mat4::scale(s); })
-    .method("scale", [](float sx, float sy, float sz){ return Mat4::scale(sx, sy, sz); })
-    .method("scale", [](const Vec3& s){ return Mat4::scale(s); })
+    // .method("identity", [](){ return Mat4::identity(); })
     .method("transposed", &Mat4::transposed)
     .method("inverted", &Mat4::inverted)
-    .method("lookAt", [](const Vec3& eye, const Vec3& target, const Vec3& up){ return Mat4::lookAt(eye, target, up); })
-    .method("ortho", [](float a, float b, float c, float d, float e, float f){ return Mat4::ortho(a,b,c,d,e,f); })
-    .method("perspective", [](float a, float b, float c, float d){ return Mat4::perspective(a,b,c,d); })
-    .method("frustum", [](float a, float b, float c, float d, float e, float f){ return Mat4::frustum(a,b,c,d,e,f); })
     ;
+
+  // WORKAROUND
+  mod.method("Mat4_identity", [](){ return Mat4::identity(); });
+  mod.method("Mat4_translate", [](float tx, float ty, float tz){ return Mat4::translate(tx, ty, tz); });
+  mod.method("Mat4_translate", [](const Vec3& t){ return Mat4::translate(t); });
+  mod.method("Mat4_rotateX", [](float r){ return Mat4::rotateX(r); });
+  mod.method("Mat4_rotateY", [](float r){ return Mat4::rotateY(r); });
+  mod.method("Mat4_rotateZ", [](float r){ return Mat4::rotateZ(r); });
+  mod.method("Mat4_rotate", [](float r, const Vec3& a){ return Mat4::rotate(r, a); });
+  mod.method("Mat4_scale", [](float s){ return Mat4::scale(s); });
+  mod.method("Mat4_scale", [](float sx, float sy, float sz){ return Mat4::scale(sx, sy, sz); });
+  mod.method("Mat4_scale", [](const Vec3& s){ return Mat4::scale(s); });
+  mod.method("Mat4_lookAt", [](const Vec3& eye, const Vec3& target, const Vec3& up){ return Mat4::lookAt(eye, target, up); });
+  mod.method("Mat4_ortho", [](float a, float b, float c, float d, float e, float f){ return Mat4::ortho(a,b,c,d,e,f); });
+  mod.method("Mat4_perspective", [](float a, float b, float c, float d){ return Mat4::perspective(a,b,c,d); });
+  mod.method("Mat4_frustum", [](float a, float b, float c, float d, float e, float f){ return Mat4::frustum(a,b,c,d,e,f); });
+
+  // WORKAROUND
+  quat_type.method("toMatrix", &Quaternion::toMatrix);
 
   mod.add_type<Mat3>("Mat3")
     .constructor<>()
@@ -541,18 +549,24 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("mul", [](Mat3& v, const Mat3& p){ return v * p; })
     .method("mul", [](Mat3& v, const Vec3& p){ return v * p; })
     .method("mul", [](Mat3& v, const Vec2& p){ return v * p; })
-    .method("identity", [](){ return Mat3::identity(); })
-    .method("getHomography", [](const Vec2 src[4], const Vec2 dst[4]){ return Mat3::getHomography(src, dst); })
+    // .method("identity", [](){ return Mat3::identity(); })
     .method("determinant", &Mat3::determinant)
-    .method("translate", [](float tx, float ty){ return Mat3::translate(tx, ty); })
-    .method("translate", [](const Vec2& t){ return Mat3::translate(t); })
-    .method("rotate", [](float r){ return Mat3::rotate(r); })
-    .method("scale", [](float s){ return Mat3::scale(s); })
-    .method("scale", [](float sx, float sy){ return Mat3::scale(sx, sy); })
-    .method("scale", [](const Vec2& s){ return Mat3::scale(s); })
     .method("transposed", &Mat3::transposed)
     .method("inverted", &Mat3::inverted)
     ;
+
+  // WORKAROUND
+  mod.method("Mat3_identity", [](){ return Mat3::identity(); });
+  mod.method("Mat3_getHomography", [](const Vec2 src[4], const Vec2 dst[4]){ return Mat3::getHomography(src, dst); });
+  mod.method("Mat3_rotate", [](float r){ return Mat3::rotate(r); });
+  mod.method("Mat3_scale", [](float s){ return Mat3::scale(s); });
+  mod.method("Mat3_scale", [](float sx, float sy){ return Mat3::scale(sx, sy); });
+  mod.method("Mat3_scale", [](const Vec2& s){ return Mat3::scale(s); });
+  mod.method("Mat3_translate", [](float tx, float ty){ return Mat3::translate(tx, ty); });
+  mod.method("Mat3_translate", [](const Vec2& t){ return Mat3::translate(t); });
+
+  // WORKAROUND
+  mat4_type.method("fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); });
 
   mod.add_type<Rect>("Rect")
     .constructor<>()
