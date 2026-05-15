@@ -791,14 +791,173 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     mod.method("Color_lightSlateGray", [](){ return colors::lightSlateGray; });
     mod.method("Color_darkSlateGray", [](){ return colors::darkSlateGray; });
 
-  mod.add_type<Pixels>("Pixels")
-    .constructor<>() // FIXME: move constructor?
-    ;
+  mod.add_enum<PrimitiveMode>("PrimitiveMode",
+        std::vector<const char*>({
+            "Triangles",
+            "TriangleStrip",
+            "TriangleFan",
+            "Lines",
+            "LineStrip",
+            "LineLoop",
+            "Points"
+        }),
+        std::vector<int>({
+            (int)PrimitiveMode::Triangles,
+            (int)PrimitiveMode::TriangleStrip,
+            (int)PrimitiveMode::TriangleFan,
+            (int)PrimitiveMode::Lines,
+            (int)PrimitiveMode::LineStrip,
+            (int)PrimitiveMode::LineLoop,
+            (int)PrimitiveMode::Points
+        })
+    );
+
+//   // WORKAROUND
+//   mod.add_type<std::vector<Vec2>>("Vec2Vector");
+//   mod.add_type<std::vector<Vec3>>("Vec3Vector");
+//   mod.add_type<std::vector<Vec4>>("Vec4Vector");
+//   mod.add_type<std::vector<Color>>("ColorVector");
+
+  auto&& img_type = mod.add_type<Image>("Image")
+      .constructor<>(); // FIXME: move constructor?;
+  auto&& tex_type = mod.add_type<Texture>("Texture")
+      .constructor<>(); // FIXME: move constructor?;
 
   mod.add_type<Mesh>("Mesh")
     .constructor<>()
     .constructor<const Mesh&>()
     // FIXME: move constructor?
+    .method("setMode", &Mesh::setMode)
+    .method("getMode", &Mesh::getMode)
+    .method("addVertex", [](Mesh& m, float x, float y){ return m.addVertex(x, y); })
+    .method("addVertex", [](Mesh& m, float x, float y, float z){ return m.addVertex(x, y, z); })
+    .method("addVertex", [](Mesh& m, const Vec2& v){ return m.addVertex(v); })
+    .method("addVertex", [](Mesh& m, const Vec3& v){ return m.addVertex(v); })
+    .method("addVertices", [](Mesh& m, jlcxx::ArrayRef<Vec3> vs){
+        for(auto&& v: vs){
+            m.addVertex(v);
+        }
+    })
+    .method("getVertices", [](Mesh& m){ 
+        auto&& vs = m.getVertices();
+        jlcxx::Array<Vec3> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("getNumVertices", &Mesh::getNumVertices)
+    .method("addColor", [](Mesh& m, float x, float y, float z){ return m.addColor(x, y, z); })
+    .method("addColor", [](Mesh& m, float x, float y, float z, float w){ return m.addColor(x, y, z, w); })
+    .method("addColor", [](Mesh& m, const Color& v){ return m.addColor(v); })
+    .method("addColors", [](Mesh& m, jlcxx::ArrayRef<Color> vs){
+        for(auto&& v: vs){
+            m.addColor(v);
+        }
+    })
+    .method("getColors", [](Mesh& m){ 
+        auto&& vs = m.getColors();
+        jlcxx::Array<Color> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("getNumColors", &Mesh::getNumColors)
+    .method("hasColors", &Mesh::hasColors)
+    .method("addIndex", &Mesh::addIndex)
+    // .method("addIndices", &Mesh::addIndices)
+    .method("addIndices", [](Mesh& m, jlcxx::ArrayRef<unsigned int> vs){
+        for(auto&& v: vs){
+            m.addIndex(v);
+        }
+    })
+    .method("getIndices", [](Mesh& m){ 
+        auto&& vs = m.getIndices();
+        jlcxx::Array<unsigned int> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("addTriangle", &Mesh::addTriangle)
+    // .method("getIndices", [](Mesh& m){ return m.getIndices(); })
+    .method("hasIndices", &Mesh::hasIndices)
+    .method("addNormal", [](Mesh& m, float x, float y, float z){ return m.addNormal(x, y, z); })
+    .method("addNormal", [](Mesh& m, const Vec3& v){ return m.addNormal(v); })
+    // .method("addNormals", &Mesh::addNormals)
+    .method("addNormals", [](Mesh& m, jlcxx::ArrayRef<Vec3> vs){
+        for(auto&& v: vs){
+            m.addNormal(v);
+        }
+    })
+    .method("getNormals", [](Mesh& m){ 
+        auto&& vs = m.getNormals();
+        jlcxx::Array<Vec3> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("setNormal", &Mesh::setNormal)
+    .method("getNormal", &Mesh::getNormal)
+    // .method("getNormals", [](Mesh& m){ return m.getNormals(); })
+    .method("getNumNormals", &Mesh::getNumNormals)
+    .method("hasNormals", &Mesh::hasNormals)
+    .method("addTexCoord", [](Mesh& m, float x, float y){ return m.addTexCoord(x, y); })
+    .method("addTexCoord", [](Mesh& m, const Vec2& v){ return m.addTexCoord(v); })
+    // .method("getTexCoords", [](Mesh& m){ return m.getTexCoords(); })
+    .method("getTexCoords", [](Mesh& m){ 
+        auto&& vs = m.getTexCoords();
+        jlcxx::Array<Vec2> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("hasTexCoords", &Mesh::hasTexCoords)
+    .method("hasValidTexCoords", &Mesh::hasValidTexCoords)
+    .method("addTangent", [](Mesh& m, float x, float y, float z){ return m.addTangent(x, y, z); })
+    .method("addTangent", [](Mesh& m, float x, float y, float z, float w){ return m.addTangent(x, y, z, w); })
+    .method("addTangent", [](Mesh& m, const Vec4& v){ return m.addTangent(v); })
+    // .method("getTangents", [](Mesh& m){ return m.getTangents(); })
+    .method("getTangents", [](Mesh& m){ 
+        auto&& vs = m.getTangents();
+        jlcxx::Array<Vec4> data{};
+        for(auto&& v: vs){
+            data.push_back(v);
+        }
+        return data;
+    })
+    .method("getNumTangents", &Mesh::getNumTangents)
+    .method("hasTangents", &Mesh::hasTangents)
+    .method("clear", &Mesh::clear)
+    .method("clearVertices", &Mesh::clearVertices)
+    .method("clearNormals", &Mesh::clearNormals)
+    .method("clearColors", &Mesh::clearColors)
+    .method("clearIndices", &Mesh::clearIndices)
+    .method("clearTexCoords", &Mesh::clearTexCoords)
+    .method("clearTangents", &Mesh::clearTangents)
+    .method("translate", [](Mesh& m, float x, float y, float z){ return m.translate(x, y, z); })
+    .method("translate", [](Mesh& m, const Vec3& v){ return m.translate(v); })
+    .method("rotateX", &Mesh::rotateX)
+    .method("rotateY", &Mesh::rotateY)
+    .method("rotateZ", &Mesh::rotateZ)
+    .method("scale", [](Mesh& m, float x, float y, float z){ return m.scale(x, y, z); })
+    .method("scale", [](Mesh& m, float s){ return m.scale(s); })
+    .method("transform", &Mesh::transform)
+    .method("append", &Mesh::append)
+    .method("draw", [](Mesh& m){ return m.draw(); })
+    .method("draw", [](Mesh& m, const Image& image){ return m.draw(image); })
+    .method("draw", [](Mesh& m, const Texture& tex){ return m.draw(tex); })
+    .method("drawNoLighting", &Mesh::drawNoLighting)
+    .method("drawWithLighting", &Mesh::drawWithLighting)
+    .method("drawNoLightingWithTexture", &Mesh::drawNoLightingWithTexture)
+    .method("drawWireframe", &Mesh::drawWireframe)
+    ;
+
+  mod.add_type<Pixels>("Pixels")
+    .constructor<>() // FIXME: move constructor?
     ;
 
   mod.add_type<Light>("Light")
@@ -997,9 +1156,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
             (int)Orientation::All,
             (int)Orientation::AllButUpsideDown
         }));
-
-  mod.add_type<Image>("Image")
-    .constructor<>(); // FIXME: move constructor?
 
   mod.add_type<Shader>("Shader")
     .constructor<>(); // FIXME: move constructor?
