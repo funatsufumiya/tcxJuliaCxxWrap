@@ -270,6 +270,7 @@ std::string greet()
 namespace jlcxx
 {
   template<> struct IsMirroredType<FpsSettings> : std::false_type { };
+  template<> struct IsMirroredType<IesProfile> : std::false_type { };
   template<> struct IsMirroredType<sg_image> : std::false_type { };
   template<> struct IsMirroredType<sg_view> : std::false_type { };
   template<> struct IsMirroredType<sg_sampler> : std::false_type { };
@@ -1212,6 +1213,18 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)TextureWrap::MirroredRepeat
     }));
 
+  mod.add_enum<LightType>("LightType",
+    std::vector<const char*>({
+        "Directional",
+        "Point",
+        "Spot"
+    }),
+    std::vector<int>({
+        (int)LightType::Directional,
+        (int)LightType::Point,
+        (int)LightType::Spot
+    }));
+
   mod.add_enum<PixelFormat>("PixelFormat",
     std::vector<const char*>({
         "U8",
@@ -1326,17 +1339,19 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("save", &Pixels::save)
     ;
 
-  mod.add_type<Light>("Light")
+  auto light_type = mod.add_type<Light>("Light")
     .constructor<>()
     ;
 
-  mod.add_type<Material>("Material")
+  auto mate_type = mod.add_type<Material>("Material")
     .constructor<>()
     ;
 
   mod.add_type<LogStream>("LogStream");
 
   mod.add_type<FpsSettings>("FpsSettings");
+
+  mod.add_type<IesProfile>("IesProfile");
 
 //   mod.add_type<LogStream>("LogStream")
 //     .constructor<LogLevel>()
@@ -1607,6 +1622,66 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("mouseReleased", &EasyCam::mouseReleased)
     .method("mouseDragged", &EasyCam::mouseDragged)
     .method("mouseScrolled", &EasyCam::mouseScrolled)
+    ;
+
+  light_type
+    .method("setDirectional", [](Light& m, float x, float y, float z){ return m.setDirectional(x, y, z); })
+    .method("setDirectional", [](Light& m, const Vec3& v){ return m.setDirectional(v); })
+    .method("setPoint", [](Light& m, float x, float y, float z){ return m.setPoint(x, y, z); })
+    .method("setPoint", [](Light& m, const Vec3& v){ return m.setPoint(v); })
+    .method("setSpot", [](Light& m, const Vec3& p, const Vec3& d){ return m.setSpot(p, d); })
+    .method("setSpot", [](Light& m, const Vec3& p, const Vec3& d, float i){ return m.setSpot(p, d, i); })
+    .method("setSpot", [](Light& m, const Vec3& p, const Vec3& d, float i, float o){ return m.setSpot(p, d, i, o); })
+    .method("setSpot", [](Light& m, float a, float b, float c, float d, float e, float f){ return m.setSpot(a,b,c,d,e,f); })
+    .method("setSpot", [](Light& m, float a, float b, float c, float d, float e, float f, float i){ return m.setSpot(a,b,c,d,e,f, i); })
+    .method("setSpot", [](Light& m, float a, float b, float c, float d, float e, float f, float i, float o){ return m.setSpot(a,b,c,d,e,f, i,o); })
+    .method("getSpotInnerCos", &Light::getSpotInnerCos)
+    .method("getSpotOuterCos", &Light::getSpotOuterCos)
+    .method("setProjectionTexture", &Light::setProjectionTexture)
+    .method("getProjectionTexture", &Light::getProjectionTexture)
+    .method("hasProjectionTexture", &Light::hasProjectionTexture)
+    .method("setLensShift", &Light::setLensShift)
+    .method("getLensShiftX", &Light::getLensShiftX)
+    .method("getLensShiftY", &Light::getLensShiftY)
+    .method("setProjectorAspect", &Light::setProjectorAspect)
+    .method("getProjectorAspect", &Light::getProjectorAspect)
+    .method("computeProjectorViewProj", [](Light& m){ return m.computeProjectorViewProj(); })
+    .method("computeProjectorViewProj", [](Light& m, float a){ return m.computeProjectorViewProj(a); })
+    .method("computeProjectorViewProj", [](Light& m, float a, float b){ return m.computeProjectorViewProj(a, b); })
+    .method("setIesProfile", &Light::setIesProfile)
+    .method("getIesProfile", &Light::getIesProfile)
+    .method("hasIesProfile", &Light::hasIesProfile)
+    .method("enableShadow", &Light::enableShadow)
+    .method("disableShadow", &Light::disableShadow)
+    .method("isShadowEnabled", &Light::isShadowEnabled)
+    .method("getShadowResolution", &Light::getShadowResolution)
+    .method("setShadowBias", &Light::setShadowBias)
+    .method("getShadowBias", &Light::getShadowBias)
+    .method("getType", &Light::getType)
+    .method("getDirection", &Light::getDirection)
+    .method("getPosition", &Light::getPosition)
+    .method("setAmbient", [](Light& m, const Color& c){ return m.setAmbient(c); })
+    .method("setAmbient", [](Light& m, float a, float b, float c){ return m.setAmbient(a,b,c); })
+    .method("setAmbient", [](Light& m, float a, float b, float c, float d){ return m.setAmbient(a,b,c,d); })
+    .method("setDiffuse", [](Light& m, const Color& c){ return m.setDiffuse(c); })
+    .method("setDiffuse", [](Light& m, float a, float b, float c){ return m.setDiffuse(a,b,c); })
+    .method("setDiffuse", [](Light& m, float a, float b, float c, float d){ return m.setDiffuse(a,b,c,d); })
+    .method("setSpecular", [](Light& m, const Color& c){ return m.setSpecular(c); })
+    .method("setSpecular", [](Light& m, float a, float b, float c){ return m.setSpecular(a,b,c); })
+    .method("setSpecular", [](Light& m, float a, float b, float c, float d){ return m.setSpecular(a,b,c,d); })
+    .method("getAmbient", &Light::getAmbient)
+    .method("getDiffuse", &Light::getDiffuse)
+    .method("getSpecular", &Light::getSpecular)
+    .method("getIntensity", &Light::getIntensity)
+    .method("setIntensity", &Light::setIntensity)
+    .method("setAttenuation", &Light::setAttenuation)
+    .method("getConstantAttenuation", &Light::getConstantAttenuation)
+    .method("getLinearAttenuation", &Light::getLinearAttenuation)
+    .method("getQuadraticAttenuation", &Light::getQuadraticAttenuation)
+    .method("enable", &Light::enable)
+    .method("disable", &Light::disable)
+    .method("isEnabled", &Light::isEnabled)
+    .method("calculate", &Light::calculate)
     ;
 
   define_julia_module_trussc_generated(mod);
