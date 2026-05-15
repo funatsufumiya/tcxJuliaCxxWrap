@@ -273,7 +273,8 @@ namespace jlcxx
   template<> struct IsMirroredType<sg_image> : std::false_type { };
   template<> struct IsMirroredType<sg_view> : std::false_type { };
   template<> struct IsMirroredType<sg_sampler> : std::false_type { };
-//   template<> struct IsMirroredType<sg_pixel_format> : std::false_type { };
+  template<> struct IsMirroredType<sg_shader_desc> : std::false_type { };
+  template<> struct IsMirroredType<ShaderVertex> : std::false_type { };
 }
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
@@ -824,6 +825,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   auto sg_image_type = mod.add_type<sg_image>("sg_image");
   auto sg_view_type = mod.add_type<sg_view>("sg_view");
   auto sg_sampler_type = mod.add_type<sg_sampler>("sg_sampler");
+  auto sg_shader_desc_type = mod.add_type<sg_shader_desc>("sg_shader_desc");
+
   mod.add_enum<sg_pixel_format>("sg_pixel_format",
         std::vector<const char*>({
             "_SG_PIXELFORMAT_DEFAULT",
@@ -1498,8 +1501,112 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
             (int)Orientation::AllButUpsideDown
         }));
 
+    mod.add_enum<PrimitiveType>("PrimitiveType",
+        std::vector<const char*>({
+          "Points",
+          "Lines",
+          "LineStrip",
+          "Triangles",
+          "TriangleStrip",
+          "Quads"
+        }),
+        std::vector<uint32_t>({
+          (int)PrimitiveType::Points,
+          (int)PrimitiveType::Lines,
+          (int)PrimitiveType::LineStrip,
+          (int)PrimitiveType::Triangles,
+          (int)PrimitiveType::TriangleStrip,
+          (int)PrimitiveType::Quads
+        }));
+
+  mod.add_type<ShaderVertex>("ShaderVertex")
+    .constructor<>() // FIXME: move constructor?
+    .method("x", [](ShaderVertex& v){ return v.x; })
+    .method("y", [](ShaderVertex& v){ return v.y; })
+    .method("z", [](ShaderVertex& v){ return v.z; })
+    .method("r", [](ShaderVertex& v){ return v.r; })
+    .method("g", [](ShaderVertex& v){ return v.g; })
+    .method("b", [](ShaderVertex& v){ return v.b; })
+    .method("a", [](ShaderVertex& v){ return v.a; })
+    .method("u", [](ShaderVertex& v){ return v.u; })
+    .method("v", [](ShaderVertex& v){ return v.v; })
+    .method("x!", [](ShaderVertex& v, float p){ v.x = p; })
+    .method("y!", [](ShaderVertex& v, float p){ v.y = p; })
+    .method("z!", [](ShaderVertex& v, float p){ v.z = p; })
+    .method("u!", [](ShaderVertex& v, float p){ v.u = p; })
+    .method("v!", [](ShaderVertex& v, float p){ v.v = p; })
+    .method("r!", [](ShaderVertex& v, float p){ v.r = p; })
+    .method("g!", [](ShaderVertex& v, float p){ v.g = p; })
+    .method("b!", [](ShaderVertex& v, float p){ v.b = p; })
+    .method("a!", [](ShaderVertex& v, float p){ v.a = p; })
+    ;
+
   mod.add_type<Shader>("Shader")
-    .constructor<>(); // FIXME: move constructor?
+    .constructor<>() // FIXME: move constructor?
+    .method("load", [](Shader& f, void* desc_fn){
+      auto fn_ptr = (const sg_shader_desc *(__cdecl *)(sg_backend))(desc_fn);
+      return f.load(fn_ptr);
+    })
+    .method("clear", &Shader::clear)
+    .method("isLoaded", &Shader::isLoaded)
+    .method("begin", &Shader::begin)
+    .method("begin_shader", &Shader::begin)
+    .method("end", &Shader::end)
+    .method("end_shader", &Shader::end)
+    .method("setUniform", [](Shader& f, int s, float v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const Vec2& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const Vec3& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const Vec4& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const Color& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const std::vector<float>& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const std::vector<Vec2>& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const std::vector<Vec3>& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const std::vector<Vec4>& v){ return f.setUniform(s, v); })
+    .method("setUniform", [](Shader& f, int s, const void* data, size_t size){ return f.setUniform(s, data, size); })
+    .method("storeUniform", &Shader::storeUniform)
+    .method("applyUniforms", &Shader::applyUniforms)
+    .method("setTexture", [](Shader& f, int s, sg_image i, sg_sampler p){ return f.setTexture(s, i, p); })
+    .method("setTexture", [](Shader& f, int s, sg_view i, sg_sampler p){ return f.setTexture(s, i, p); })
+    .method("submitVertices", &Shader::submitVertices)
+    .method("executeDeferredDraw", &Shader::executeDeferredDraw)
+    ;
+
+  mod.add_type<EasyCam>("EasyCam")
+    .constructor<>() // FIXME: move constructor?
+    .method("begin", &EasyCam::begin)
+    .method("begin_cam", &EasyCam::begin)
+    .method("begin_easycam", &EasyCam::begin)
+    .method("end", &EasyCam::end)
+    .method("end_cam", &EasyCam::end)
+    .method("end_easycam", &EasyCam::end)
+    .method("reset", &EasyCam::reset)
+    .method("setTarget", [](EasyCam& m, float x, float y, float z){ return m.setTarget(x, y, z); })
+    .method("setTarget", [](EasyCam& m, const Vec3& v){ return m.setTarget(v); })
+    .method("getTarget", &EasyCam::getTarget)
+    .method("setUpAxis", [](EasyCam& m, float x, float y, float z){ return m.setUpAxis(x, y, z); })
+    .method("setUpAxis", [](EasyCam& m, const Vec3& v){ return m.setUpAxis(v); })
+    .method("getUpAxis", &EasyCam::getUpAxis)
+    .method("setDistance", &EasyCam::setDistance)
+    .method("getDistance", &EasyCam::getDistance)
+    .method("setFov", &EasyCam::setFov)
+    .method("getFov", &EasyCam::getFov)
+    .method("getPosition", &EasyCam::getPosition)
+    .method("setFovDeg", &EasyCam::setFovDeg)
+    .method("setNearClip", &EasyCam::setNearClip)
+    .method("setFarClip", &EasyCam::setFarClip)
+    .method("setSensitivity", &EasyCam::setSensitivity)
+    .method("setZoomSensitivity", &EasyCam::setZoomSensitivity)
+    .method("setPanSensitivity", &EasyCam::setPanSensitivity)
+    .method("setControlArea", &EasyCam::setControlArea)
+    .method("clearControlArea", &EasyCam::clearControlArea)
+    .method("enableMouseInput", &EasyCam::enableMouseInput)
+    .method("disableMouseInput", &EasyCam::disableMouseInput)
+    .method("isMouseInputEnabled", &EasyCam::isMouseInputEnabled)
+    .method("mousePressed", &EasyCam::mousePressed)
+    .method("mouseReleased", &EasyCam::mouseReleased)
+    .method("mouseDragged", &EasyCam::mouseDragged)
+    .method("mouseScrolled", &EasyCam::mouseScrolled)
+    ;
 
   define_julia_module_trussc_generated(mod);
 }

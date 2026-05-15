@@ -14,7 +14,7 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 
 - Basic trussc functions
 - Vec, IVec, Mat, Quaternion
-- Mesh, Fbo, Texture, Image, Pixels
+- Mesh, Fbo, Texture, Image, Pixels, Shader, EasyCam
 
 ## Build Instruction
 
