@@ -360,6 +360,42 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("eq", [](Vec3& v, const Vec3& p){ return v == p; })
     ;
 
+  mod.add_type<IVec2>("IVec2")
+    .constructor<>()
+    .constructor<int, int>()
+    .constructor<const IVec2&>()
+    .method("x", [](IVec2& v){ return v.x; })
+    .method("y", [](IVec2& v){ return v.y; })
+    .method("x!", [](IVec2& v, int p){ v.x = p; })
+    .method("y!", [](IVec2& v, int p){ v.y = p; })
+    .method("add", [](IVec2& v, const IVec2& p){ return v + p; })
+    .method("sub", [](IVec2& v, const IVec2& p){ return v - p; })
+    .method("add", [](IVec2& v, int p){ return v + p; })
+    .method("mul", [](IVec2& v, int p){ return v * p; })
+    .method("sub", [](IVec2& v, int p){ return v - p; })
+    .method("eq", [](IVec2& v, const IVec2& p){ return v == p; })
+    .method("toVec2", &IVec2::toVec2)
+    ;
+
+  mod.add_type<IVec3>("IVec3")
+    .constructor<>()
+    .constructor<int, int, int>()
+    .constructor<const IVec3&>()
+    .method("x", [](IVec3& v){ return v.x; })
+    .method("y", [](IVec3& v){ return v.y; })
+    .method("z", [](IVec3& v){ return v.z; })
+    .method("x!", [](IVec3& v, int p){ v.x = p; })
+    .method("y!", [](IVec3& v, int p){ v.y = p; })
+    .method("z!", [](IVec3& v, int p){ v.z = p; })
+    .method("add", [](IVec3& v, const IVec3& p){ return v + p; })
+    .method("sub", [](IVec3& v, const IVec3& p){ return v - p; })
+    .method("add", [](IVec3& v, int p){ return v + p; })
+    .method("mul", [](IVec3& v, int p){ return v * p; })
+    .method("sub", [](IVec3& v, int p){ return v - p; })
+    .method("eq", [](IVec3& v, const IVec3& p){ return v == p; })
+    .method("toVec3", &IVec3::toVec3)
+    ;
+
   mod.add_type<Vec4>("Vec4")
     .constructor<>()
     .constructor<float, float, float, float>()
@@ -422,6 +458,21 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("mul", [](Mat4& v, const Mat4& p){ return v * p; })
     .method("mul", [](Mat4& v, const Vec4& p){ return v * p; })
     .method("mul", [](Mat4& v, const Vec3& p){ return v * p; })
+    ;
+
+  mod.add_type<Mat3>("Mat3")
+    .constructor<>()
+    .constructor<
+        float, float, float,
+        float, float, float,
+        float, float, float>()
+    .constructor<const Mat3&>()
+    .method("at", [](Mat3& m, int raw, int col) { return m.at(raw, col); })
+    .method("set", [](Mat3& m, int raw, int col, int v){ m.at(raw, col) = v; })
+    .method("set!", [](Mat3& m, int raw, int col, int v){ m.at(raw, col) = v; })
+    .method("mul", [](Mat3& v, const Mat3& p){ return v * p; })
+    .method("mul", [](Mat3& v, const Vec3& p){ return v * p; })
+    .method("mul", [](Mat3& v, const Vec2& p){ return v * p; })
     ;
 
   mod.add_type<Rect>("Rect")
