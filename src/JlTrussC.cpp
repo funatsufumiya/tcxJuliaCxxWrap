@@ -1684,5 +1684,51 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("calculate", &Light::calculate)
     ;
 
+  mate_type
+    .method("getBaseColor", &Material::getBaseColor)
+    .method("setBaseColor", [](Material& m, const Color& c){ return m.setBaseColor(c); })
+    .method("setBaseColor", [](Material& m, float a, float b, float c){ return m.setBaseColor(a,b,c); })
+    .method("setBaseColor", [](Material& m, float a, float b, float c, float d){ return m.setBaseColor(a,b,c,d); })
+    .method("setMetallic", &Material::setMetallic)
+    .method("getMetallic", &Material::getMetallic)
+    .method("setRoughness", &Material::setRoughness)
+    .method("getRoughness", &Material::getRoughness)
+    .method("setAo", &Material::setAo)
+    .method("getAo", &Material::getAo)
+    .method("getEmissiveStrength", &Material::getEmissiveStrength)
+    .method("setEmissiveStrength", &Material::setEmissiveStrength)
+    .method("getEmissive", &Material::getEmissive)
+    .method("setEmissive", [](Material& m, const Color& c){ return m.setEmissive(c); })
+    .method("setEmissive", [](Material& m, float a, float b, float c){ return m.setEmissive(a,b,c); })
+    .method("setNormalMap", &Material::setNormalMap)
+    .method("getNormalMap", &Material::getNormalMap)
+    .method("hasNormalMap", &Material::hasNormalMap)
+    .method("setBaseColorTexture", &Material::setBaseColorTexture)
+    .method("getBaseColorTexture", &Material::getBaseColorTexture)
+    .method("hasBaseColorTexture", &Material::hasBaseColorTexture)
+    .method("setMetallicRoughnessTexture", &Material::setMetallicRoughnessTexture)
+    .method("getMetallicRoughnessTexture", &Material::getMetallicRoughnessTexture)
+    .method("hasMetallicRoughnessTexture", &Material::hasMetallicRoughnessTexture)
+    .method("setEmissiveTexture", &Material::setEmissiveTexture)
+    .method("getEmissiveTexture", &Material::getEmissiveTexture)
+    .method("hasEmissiveTexture", &Material::hasEmissiveTexture)
+    .method("setOcclusionTexture", &Material::setOcclusionTexture)
+    .method("getOcclusionTexture", &Material::getOcclusionTexture)
+    .method("hasOcclusionTexture", &Material::hasOcclusionTexture)
+    ;
+
+  mod.method("Material_gold", [](){ return Material::gold(); });
+  mod.method("Material_silver", [](){ return Material::silver(); });
+  mod.method("Material_copper", [](){ return Material::copper(); });
+  mod.method("Material_iron", [](){ return Material::iron(); });
+  mod.method("Material_bronze", [](){ return Material::bronze(); });
+  mod.method("Material_emerald", [](){ return Material::emerald(); });
+  mod.method("Material_ruby", [](){ return Material::ruby(); });
+  mod.method("Material_plastic", [](const Color& c, float r){ return Material::plastic(c, r); });
+  mod.method("Material_plastic", [](const Color& c){ return Material::plastic(c); });
+  mod.method("Material_rubber", [](const Color& c){ return Material::rubber(c); });
+  mod.method("Material_fromPhong", [](const Color& d, const Color& p, float s){ return Material::fromPhong(d, p, s); });
+  mod.method("Material_fromPhong", [](const Color& d, const Color& p, float s, const Color& e){ return Material::fromPhong(d, p, s, e); });
+
   define_julia_module_trussc_generated(mod);
 }
