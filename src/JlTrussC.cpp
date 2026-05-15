@@ -1209,6 +1209,16 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         (int)TextureWrap::MirroredRepeat
     }));
 
+  mod.add_enum<PixelFormat>("PixelFormat",
+    std::vector<const char*>({
+        "U8",
+        "F32"
+    }),
+    std::vector<int>({
+        (int)PixelFormat::U8,
+        (int)PixelFormat::F32
+    }));
+
   tex_type
     .method("allocate", [](Texture& f, int w, int h){ return f.allocate(w, h); })
     .method("allocate", [](Texture& f, int w, int h, int c){ return f.allocate(w, h, c); })
@@ -1263,6 +1273,54 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("getView", &Texture::getView)
     .method("getSampler", &Texture::getSampler)
     .method("getAttachmentView", &Texture::getAttachmentView)
+    ;
+
+  img_type
+    .method("load", &Image::load)
+    .method("loadFromMemory", &Image::loadFromMemory)
+    .method("save", &Image::save)
+    .method("allocate", [](Image& t, int w, int h){ return t.allocate(w, h); })
+    .method("allocate", [](Image& t, int w, int h, int c){ return t.allocate(w, h, c); })
+    .method("clear", &Image::clear)
+    .method("isAllocated", &Image::isAllocated)
+    .method("getWidth", &Image::getWidth)
+    .method("getHeight", &Image::getHeight)
+    .method("getChannels", &Image::getChannels)
+    .method("getPixels", [](Image& f) -> Pixels& { return f.getPixels(); })
+    .method("getPixelsData", [](Image& f) -> unsigned char* { return f.getPixelsData(); })
+    .method("getColor", &Image::getColor)
+    .method("setColor", &Image::setColor)
+    .method("update", &Image::update)
+    .method("setDirty", &Image::setDirty)
+    .method("getTexture", [](Image& f) -> Texture& { return f.getTexture(); })
+    ;
+
+  pixels_type
+    .method("allocate", [](Pixels& f, int w, int h){ return f.allocate(w, h); })
+    .method("allocate", [](Pixels& f, int w, int h, int c){ return f.allocate(w, h, c); })
+    .method("allocate", [](Pixels& f, int w, int h, int c, PixelFormat t){ return f.allocate(w, h, c, t); })
+    .method("clear", &Pixels::clear)
+    .method("isAllocated", &Pixels::isAllocated)
+    .method("getWidth", &Pixels::getWidth)
+    .method("getHeight", &Pixels::getHeight)
+    .method("getChannels", &Pixels::getChannels)
+    .method("getFormat", &Pixels::getFormat)
+    .method("isFloat", &Pixels::isFloat)
+    .method("getTotalBytes", &Pixels::getTotalBytes)
+    .method("getData", [](Pixels& f) -> unsigned char* { return f.getData(); })
+    .method("getDataF32", [](Pixels& f) -> float* { return f.getDataF32(); })
+    .method("getDataVoid", [](Pixels& f) -> void* { return f.getDataVoid(); })
+    .method("getColor", &Pixels::getColor)
+    .method("setColor", &Pixels::setColor)
+    .method("setFromPixels", &Pixels::setFromPixels)
+    .method("setFromFloats", &Pixels::setFromFloats)
+    .method("copyTo", &Pixels::copyTo)
+    .method("clone", &Pixels::clone)
+    .method("load", &Pixels::load)
+    .method("loadHDR", &Pixels::loadHDR)
+    .method("loadPlatform", &Pixels::loadPlatform)
+    .method("loadFromMemory", &Pixels::loadFromMemory)
+    .method("save", &Pixels::save)
     ;
 
   mod.add_type<Light>("Light")
