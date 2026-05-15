@@ -472,7 +472,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("xy", &Vec4::xy)
     ;
 
-  auto&& quat_type = mod.add_type<Quaternion>("Quaternion")
+  auto quat_type = mod.add_type<Quaternion>("Quaternion")
     .constructor<>()
     .constructor<float, float, float, float>()
     .constructor<const Quaternion&>()
@@ -503,7 +503,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("Quaternion_slerp", [](const Quaternion& a, const Quaternion& b, float t) { return Quaternion::slerp(a, b, t); });
     ;
 
-  auto&& mat4_type = mod.add_type<Mat4>("Mat4")
+  auto mat4_type = mod.add_type<Mat4>("Mat4")
     .constructor<>()
     .constructor<
         float, float, float, float,
@@ -571,7 +571,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("Mat3_translate", [](const Vec2& t){ return Mat3::translate(t); });
 
   // WORKAROUND
-  mat4_type.method("Mat4_fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); });
+  mod.method("Mat4_fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); });
 
   mod.add_type<Rect>("Rect")
     .constructor<>()
@@ -817,13 +817,13 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
         })
     );
 
-  auto&& img_type = mod.add_type<Image>("Image")
+  auto img_type = mod.add_type<Image>("Image")
       .constructor<>(); // FIXME: move constructor?;
-  auto&& tex_type = mod.add_type<Texture>("Texture")
+  auto tex_type = mod.add_type<Texture>("Texture")
       .constructor<>(); // FIXME: move constructor?;
-  auto&& sg_image_type = mod.add_type<sg_image>("sg_image");
-  auto&& sg_view_type = mod.add_type<sg_view>("sg_view");
-  auto&& sg_sampler_type = mod.add_type<sg_sampler>("sg_sampler");
+  auto sg_image_type = mod.add_type<sg_image>("sg_image");
+  auto sg_view_type = mod.add_type<sg_view>("sg_view");
+  auto sg_sampler_type = mod.add_type<sg_sampler>("sg_sampler");
   mod.add_enum<sg_pixel_format>("sg_pixel_format",
         std::vector<const char*>({
             "_SG_PIXELFORMAT_DEFAULT",
