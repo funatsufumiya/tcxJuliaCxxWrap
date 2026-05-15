@@ -270,6 +270,9 @@ std::string greet()
 namespace jlcxx
 {
   template<> struct IsMirroredType<FpsSettings> : std::false_type { };
+  template<> struct IsMirroredType<sg_image> : std::false_type { };
+  template<> struct IsMirroredType<sg_view> : std::false_type { };
+  template<> struct IsMirroredType<sg_sampler> : std::false_type { };
 }
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
@@ -817,6 +820,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
       .constructor<>(); // FIXME: move constructor?;
   auto&& tex_type = mod.add_type<Texture>("Texture")
       .constructor<>(); // FIXME: move constructor?;
+  auto&& sg_image_type = mod.add_type<sg_image>("sg_image");
+  auto&& sg_view_type = mod.add_type<sg_view>("sg_view");
+  auto&& sg_sampler_type = mod.add_type<sg_sampler>("sg_sampler");
 
   mod.add_type<Mesh>("Mesh")
     .constructor<>()
@@ -953,6 +959,66 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("drawWithLighting", &Mesh::drawWithLighting)
     .method("drawNoLightingWithTexture", &Mesh::drawNoLightingWithTexture)
     .method("drawWireframe", &Mesh::drawWireframe)
+    ;
+
+    mod.add_type<std::filesystem::path>("StdFileSystemPath")
+        .constructor<>()
+        .method("c_str", [](std::filesystem::path& p){ return p.c_str(); })
+        .method("string", [](std::filesystem::path& p){ return p.string(); })
+        ;
+
+    mod.add_enum<TextureFormat>("TextureFormat",
+        std::vector<const char*>({
+          "RGBA8",
+          "RGBA16F",
+          "RGBA32F",
+          "R8",
+          "R16F",
+          "R32F",
+          "RG8",
+          "RG16F",
+          "RG32F"
+        }),
+        std::vector<int>({
+          (int)TextureFormat::RGBA8,
+          (int)TextureFormat::RGBA16F,
+          (int)TextureFormat::RGBA32F,
+          (int)TextureFormat::R8,
+          (int)TextureFormat::R16F,
+          (int)TextureFormat::R32F,
+          (int)TextureFormat::RG8,
+          (int)TextureFormat::RG16F,
+          (int)TextureFormat::RG32F
+        }));
+
+
+  mod.add_type<Fbo>("Fbo")
+    .constructor<>()
+    // FIXME: move constructor?
+    .method("allocate", [](Fbo& f, int w, int h){ return f.allocate(w, h); })
+    .method("allocate", [](Fbo& f, int w, int h, int sampleCount){ return f.allocate(w, h, sampleCount); })
+    .method("allocate", [](Fbo& f, int w, int h, int sampleCount, TextureFormat t){ return f.allocate(w, h, sampleCount, t); })
+    .method("clear", &Fbo::clear)
+    .method("begin", [](Fbo& f){ return f.begin(); })
+    .method("begin", [](Fbo& f, float r, float g, float b){ return f.begin(r, g, b); })
+    .method("begin", [](Fbo& f, float r, float g, float b, float a){ return f.begin(r, g, b, a); })
+    .method("clearColor", &Fbo::clearColor)
+    .method("end", &Fbo::end)
+    .method("end_fbo", &Fbo::end)
+    .method("readPixels", &Fbo::readPixels)
+    .method("readPixelsFloat", &Fbo::readPixelsFloat)
+    .method("copyTo", &Fbo::copyTo)
+    .method("getWidth", &Fbo::getWidth)
+    .method("getHeight", &Fbo::getHeight)
+    .method("getSampleCount", &Fbo::getSampleCount)
+    .method("getTextureFormat", &Fbo::getTextureFormat)
+    .method("isAllocated", &Fbo::isAllocated)
+    .method("isActive", &Fbo::isActive)
+    .method("getTexture", [](Fbo& f) -> Texture& { return f.getTexture(); })
+    .method("save", &Fbo::save)
+    .method("getColorImage", &Fbo::getColorImage)
+    .method("getTextureView", &Fbo::getTextureView)
+    .method("getSampler", &Fbo::getSampler)
     ;
 
   mod.add_type<Pixels>("Pixels")
