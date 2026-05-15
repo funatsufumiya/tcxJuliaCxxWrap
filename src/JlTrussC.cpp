@@ -1730,5 +1730,42 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("Material_fromPhong", [](const Color& d, const Color& p, float s){ return Material::fromPhong(d, p, s); });
   mod.method("Material_fromPhong", [](const Color& d, const Color& p, float s, const Color& e){ return Material::fromPhong(d, p, s, e); });
 
+  auto json_type = mod.add_type<Json>("Json")
+    .constructor<>() // FIXME: move constructor?
+    ;
+
+  json_type
+    .method("get_string", [](Json& j){ return j.get<std::string>(); })
+    .method("get_double", [](Json& j){ return j.get<double>(); })
+    .method("get_float", [](Json& j){ return j.get<float>(); })
+    .method("get_int", [](Json& j){ return j.get<int>(); })
+    .method("get_bool", [](Json& j){ return j.get<bool>(); })
+    .method("empty", &Json::empty)
+    .method("size", &Json::size)
+    .method("at", [](Json& j, size_t i){ return j[i]; })
+    .method("at", [](Json& j, const std::string& s){ return j[s]; })
+    .method("set", [](Json& j, size_t i, bool v){ return j[i] = v; })
+    .method("set", [](Json& j, size_t i, int v){ return j[i] = v; })
+    .method("set", [](Json& j, size_t i, float v){ return j[i] = v; })
+    // .method("set", [](Json& j, size_t i, long v){ return j[i] = v; })
+    .method("set", [](Json& j, size_t i, double v){ return j[i] = v; })
+    .method("set", [](Json& j, size_t i, const std::string& v){ return j[i] = v; })
+    .method("set", [](Json& j, size_t i, const Json& v){ return j[i] = v; })
+    .method("set", [](Json& j, const std::string& s, bool v){ return j[s] = v; })
+    .method("set", [](Json& j, const std::string& s, int v){ return j[s] = v; })
+    .method("set", [](Json& j, const std::string& s, float v){ return j[s] = v; })
+    // .method("set", [](Json& j, const std::string& s, long v){ return j[s] = v; })
+    .method("set", [](Json& j, const std::string& s, double v){ return j[s] = v; })
+    .method("set", [](Json& j, const std::string& s, const std::string& v){ return j[s] = v; })
+    .method("set", [](Json& j, const std::string& s, const Json& v){ return j[s] = v; })
+    ;
+
+  mod.method("loadJson", &trussc::loadJson);
+  mod.method("saveJson", [](const Json& j, const std::string& path){ return trussc::saveJson(j, path); });
+  mod.method("saveJson", [](const Json& j, const std::string& path, int indent){ return trussc::saveJson(j, path, indent); });
+  mod.method("parseJson", &trussc::parseJson);
+  mod.method("toJsonString", [](const Json& j){ return trussc::toJsonString(j); });
+  mod.method("toJsonString", [](const Json& j, int a){ return trussc::toJsonString(j, a); });
+
   define_julia_module_trussc_generated(mod);
 }
