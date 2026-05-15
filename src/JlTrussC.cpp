@@ -1543,8 +1543,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 
   mod.add_type<Shader>("Shader")
     .constructor<>() // FIXME: move constructor?
-    .method("load", [](Shader& f, void* desc_fn){
-      auto fn_ptr = (sg_shader_desc *(__cdecl *)(sg_backend))(desc_fn);
+    .method("load", [](Shader& f, void* desc_fn) -> bool {
+      typedef const sg_shader_desc *(*func_type)(sg_backend);
+      func_type fn_ptr = (func_type)(desc_fn);
       return f.load(fn_ptr);
     })
     .method("clear", &Shader::clear)
