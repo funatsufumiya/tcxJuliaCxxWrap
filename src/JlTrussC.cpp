@@ -566,7 +566,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("Mat3_translate", [](const Vec2& t){ return Mat3::translate(t); });
 
   // WORKAROUND
-  mat4_type.method("fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); });
+  mat4_type.method("Mat4_fromHomography", [](const Mat3& h){ return Mat4::fromHomography(h); });
 
   mod.add_type<Rect>("Rect")
     .constructor<>()
