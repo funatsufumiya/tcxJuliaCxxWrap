@@ -29,10 +29,7 @@ $ cmake --build build --parallel 8 -j 8 --config Release
 
 After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
-More information about `JlCxx` build, please see https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/CxxWrap.jl in detail.
-
-> [!NOTE]
-> **TODO**: Write detailed build instructions here
+More information about `JlCxx` build, please see https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/libcxxwrap-julia in detail.
 
 ### In case of Linux -fPIC error
 
@@ -45,10 +42,7 @@ set_property(TARGET TrussC PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
 ## Usage from Julia
 
-see https://github.com/funatsufumiya/JlTrussCTest.jl/
-
-> [!NOTE]
-> **TODO**: Write in detail
+see https://github.com/funatsufumiya/TrussC.jl/
 
 ## Development
 
