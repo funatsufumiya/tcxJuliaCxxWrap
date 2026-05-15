@@ -52,12 +52,12 @@ target_include_directories(${SHARED_LIB_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/generated
 )
 
-# if(WIN32 AND MSVC)
-#     # MSVC on Windows: enable large object support to avoid
-#     # "too many sections" (/bigobj)
-#     target_compile_options(${ADDON_NAME} PRIVATE /bigobj)
-#     target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
-# endif()
+if(WIN32 AND MSVC)
+    # MSVC on Windows: enable large object support to avoid
+    # "too many sections" (/bigobj)
+    target_compile_options(${ADDON_NAME} PRIVATE /bigobj)
+    target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
+endif()
 
 target_link_libraries(${ADDON_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
 target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
