@@ -59,5 +59,5 @@ if(WIN32 AND MSVC)
     target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
 endif()
 
-target_link_libraries(${ADDON_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
-target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia)
+target_link_libraries(${ADDON_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
