@@ -589,6 +589,11 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("set!", [](Rect& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
     ;
 
+  mod.add_type<ColorLinear>("ColorLinear");
+  mod.add_type<ColorHSB>("ColorHSB");
+  mod.add_type<ColorOKLab>("ColorOKLab");
+  mod.add_type<ColorOKLCH>("ColorOKLCH");
+
   mod.add_type<Color>("Color")
     .constructor<>()
     .constructor<float>()
@@ -614,7 +619,33 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("set!", [](Color& v, float a, float b, float c){ return v.set(a,b,c); })
     .method("set!", [](Color& v, float a, float b){ return v.set(a,b); })
     .method("set!", [](Color& v, float a){ return v.set(a); })
+    .method("toHex", &Color::toHex)
+    .method("toLinear", &Color::toLinear)
+    .method("toHSB", &Color::toHSB)
+    .method("toOKLab", &Color::toOKLab)
+    .method("toOKLCH", &Color::toOKLCH)
+    .method("clamped", &Color::clamped)
+    .method("lerpRGB", &Color::lerpRGB)
+    .method("lerpLinear", &Color::lerpLinear)
+    .method("lerpHSB", &Color::lerpHSB)
+    .method("lerpOKLab", &Color::lerpOKLab)
+    .method("lerpOKLCH", &Color::lerpOKLCH)
+    .method("lerp", &Color::lerp)
     ;
+
+    // WORKAROUND
+    mod.method("Color_fromBytes", [](int r, int g, int b, int a){ return Color::fromBytes(r,g,b,a); });
+    mod.method("Color_fromBytes", [](int r, int g, int b){ return Color::fromBytes(r,g,b); });
+    mod.method("Color_fromHex", [](uint32_t h, bool a){ return Color::fromHex(h, a); });
+    mod.method("Color_fromHex", [](uint32_t h){ return Color::fromHex(h); });
+    mod.method("Color_fromHSB", [](float a, float b, float c, float d){ return Color::fromHSB(a,b,c,d); });
+    mod.method("Color_fromHSB", [](float a, float b, float c){ return Color::fromHSB(a,b,c); });
+    mod.method("Color_fromOKLCH", [](float a, float b, float c, float d){ return Color::fromOKLCH(a,b,c,d); });
+    mod.method("Color_fromOKLCH", [](float a, float b, float c){ return Color::fromOKLCH(a,b,c); });
+    mod.method("Color_fromOKLab", [](float a, float b, float c, float d){ return Color::fromOKLab(a,b,c,d); });
+    mod.method("Color_fromOKLab", [](float a, float b, float c){ return Color::fromOKLab(a,b,c); });
+    mod.method("Color_fromLinear", [](float a, float b, float c, float d){ return Color::fromLinear(a,b,c,d); });
+    mod.method("Color_fromLinear", [](float a, float b, float c){ return Color::fromLinear(a,b,c); });
 
     // WORKAROUND for color constants
     mod.method("Color_white", [](){ return colors::white; });
