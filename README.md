@@ -29,7 +29,12 @@ $ cmake --build build --parallel 8 -j 8 --config Release
 
 After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
-More information about `JlCxx` build, please see https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/libcxxwrap-julia in detail.
+> [!Warning]
+> ***Windows CxxWrap.jl issue***<br><br>
+> If not working CxxWrap.jl on Windows, you need to try [Building libcxxwrap-julia](https://github.com/JuliaInterop/libcxxwrap-julia#building-libcxxwrap-julia) (Because prebuilt packaged dll for CxxWrap.jl is not compatible with MSVC).<br>
+> Please see [Windows libcxxwrap_julia_jll build](https://github.com/funatsufumiya/CxxWrapTest.jl#windows-libcxxwrap_julia_jll-build) of https://github.com/funatsufumiya/CxxWrapTest.jl or https://github.com/JuliaInterop/libcxxwrap-julia in detail.<br>
+>
+> If it's too hard for you to manually build `libcxxwrap_julia_jll/override`, You can use [my prebuilt override.zip](https://github.com/funatsufumiya/TrussC.jl/releases/tag/libcxxwrap_julia_jll_override) (built for libcxxwrap_julia_jll 0.14.9+0, version at 2026/05/15.)
 
 ### In case of Linux -fPIC error
 
