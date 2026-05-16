@@ -1990,6 +1990,35 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
       })
   );
 
+  mod.add_type<Font>("Font")
+    .constructor<>()
+    .constructor<const Font&>()
+    // FIXME: move constructor?
+    .method("load", &Font::load)
+    .method("isLoaded", &Font::isLoaded)
+    .method("setAlign", [](Font& f, Direction a, Direction b){ return f.setAlign(a,b); })
+    .method("setAlign", [](Font& f, Direction a){ return f.setAlign(a); })
+    .method("getAlignH", &Font::getAlignH)
+    .method("getAlignV", &Font::getAlignV)
+    .method("drawString", [](Font& f, const std::string& s, float x, float y){
+        f.drawString(s, x, y);
+    })
+    .method("drawString", [](Font& f, const std::string& s, float x, float y, Direction a, Direction b){
+        f.drawString(s, x, y, a, b);
+    })
+    .method("setLineHeight", &Font::setLineHeight)
+    .method("setLineHeightEm", &Font::setLineHeightEm)
+    .method("getLineHeight", &Font::getLineHeight)
+    .method("getDefaultLineHeight", &Font::getDefaultLineHeight)
+    .method("resetLineHeight", &Font::resetLineHeight)
+    .method("getWidth", &Font::getWidth)
+    .method("getHeight", &Font::getHeight)
+    .method("getBBox", &Font::getBBox)
+    .method("getAscent", &Font::getAscent)
+    .method("getDescent", &Font::getDescent)
+    .method("getSize", &Font::getSize)
+    ;
+
   defineTween<Tween<float>, float>(mod, "TweenFloat");
   defineTween<Tween<Vec2>, Vec2>(mod, "TweenVec2");
   defineTween<Tween<Vec3>, Vec3>(mod, "TweenVec3");
