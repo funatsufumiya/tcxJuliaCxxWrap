@@ -16,7 +16,7 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 - Vec, IVec, Mat, Quaternion
 - Fbo, Texture, Image, Pixels, Shader
 - Mesh, Light, Material, EasyCam
-- Json
+- Json, Xml
 
 ## Build Instruction
 
