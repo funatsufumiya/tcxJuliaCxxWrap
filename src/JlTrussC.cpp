@@ -276,6 +276,7 @@ namespace jlcxx
   template<> struct IsMirroredType<sg_sampler> : std::false_type { };
   template<> struct IsMirroredType<sg_shader_desc> : std::false_type { };
   template<> struct IsMirroredType<ShaderVertex> : std::false_type { };
+  template<> struct IsMirroredType<pugi::xml_document> : std::false_type { };
 }
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
@@ -1796,6 +1797,106 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   mod.method("parseJson", &trussc::parseJson);
   mod.method("toJsonString", [](const Json& j){ return trussc::toJsonString(j); });
   mod.method("toJsonString", [](const Json& j, int a){ return trussc::toJsonString(j, a); });
+
+  using XmlDocument = pugi::xml_document;
+
+  mod.add_type<XmlDocument>("XmlDocument")
+    .constructor<>()
+    ;
+
+  mod.add_type<XmlAttribute>("XmlAttribute")
+    .constructor<>()
+    // .method("set", [](XmlAttribute& x, pugi::string_view_t s){ return (x = s); })
+    // .method("set", [](XmlAttribute& x, const pugi::char_t* s){ return (x = s); })
+    .method("set", [](XmlAttribute& x, const std::string& s){ return (x = s); })
+    .method("set", [](XmlAttribute& x, int s){ return (x = s); })
+    .method("set", [](XmlAttribute& x, float s){ return (x = s); })
+    .method("set", [](XmlAttribute& x, double s){ return (x = s); })
+    .method("set", [](XmlAttribute& x, bool s){ return (x = s); })
+    // .method("set", [](XmlAttribute& x, long s){ return (x = s); })
+    .method("name", [](XmlAttribute& x){ return std::string(x.name()); })
+    .method("value", [](XmlAttribute& x){ return std::string(x.value()); })
+    ;
+
+    using XmlText = pugi::xml_text;
+
+    mod.add_type<XmlText>("XmlText")
+      .constructor<>()
+      // .method("set", [](XmlText& x, pugi::string_view_t s){ return (x = s); })
+      // .method("set", [](XmlText& x, const pugi::char_t* s){ return (x = s); })
+      .method("set", [](XmlText& x, const std::string& s){ return (x = s); })
+      .method("set", [](XmlText& x, int s){ return (x = s); })
+      .method("set", [](XmlText& x, float s){ return (x = s); })
+      .method("set", [](XmlText& x, double s){ return (x = s); })
+      .method("set", [](XmlText& x, bool s){ return (x = s); })
+      // .method("set", [](XmlText& x, long s){ return (x = s); })
+      .method("get", &XmlText::get)
+      ;
+
+    mod.add_type<XmlNode>("XmlNode")
+      .constructor<>()
+      // .method("append_attribute", [](XmlNode& x, pugi::string_view_t n){ return x.append_attribute(n); })
+      // .method("append_attribute", [](XmlNode& x, const pugi::char_t* n){ return x.append_attribute(n); })
+      .method("append_attribute", [](XmlNode& x, const std::string& n){ return x.append_attribute(n); })
+      // .method("prepend_attribute", [](XmlNode& x, pugi::string_view_t n){ return x.prepend_attribute(n); })
+      // .method("prepend_attribute", [](XmlNode& x, const pugi::char_t* n){ return x.prepend_attribute(n); })
+      .method("prepend_attribute", [](XmlNode& x, const std::string& n){ return x.prepend_attribute(n); })
+      // .method("append_child", [](XmlNode& x, pugi::string_view_t n){ return x.append_child(n); })
+      // .method("append_child", [](XmlNode& x, const pugi::char_t* n){ return x.append_child(n); })
+      .method("append_child", [](XmlNode& x, const std::string& n){ return x.append_child(n); })
+      // .method("prepend_child", [](XmlNode& x, pugi::string_view_t n){ return x.prepend_child(n); })
+      // .method("prepend_child", [](XmlNode& x, const pugi::char_t* n){ return x.prepend_child(n); })
+      .method("prepend_child", [](XmlNode& x, const std::string& n){ return x.prepend_child(n); })
+      // .method("attribute", [](XmlNode& x, pugi::string_view_t n){ return x.attribute(n); })
+      // .method("attribute", [](XmlNode& x, const pugi::char_t* n){ return x.attribute(n); })
+      .method("attribute", [](XmlNode& x, const std::string& n){ return x.attribute(n); })
+      // .method("child", [](XmlNode& x, pugi::string_view_t n){ return x.child(n); })
+      // .method("child", [](XmlNode& x, const pugi::char_t* n){ return x.child(n); })
+      .method("child", [](XmlNode& x, const std::string& n){ return x.child(n); })
+      .method("text", &XmlNode::text)
+      .method("name", [](XmlNode& x){ return std::string(x.name()); })
+      .method("first_child", &XmlNode::first_child)
+      .method("last_child", &XmlNode::last_child)
+      .method("first_attribute", &XmlNode::first_attribute)
+      .method("last_attribute", &XmlNode::last_attribute)
+      .method("remove_children", &XmlNode::remove_children)
+      .method("children", [](XmlNode& x){
+        jlcxx::Array<XmlNode> a {};
+        for(auto&& c: x.children()){
+          a.push_back(c);
+        }
+        return a;
+      })
+      ;
+
+    mod.add_type<Xml>("Xml")
+      .constructor<>()
+      .method("load", &Xml::load)
+      .method("parse", &Xml::parse)
+      .method("save", [](Xml& x, const std::string& s){ return x.save(s); })
+      .method("save", [](Xml& x, const std::string& s, const std::string& i){ return x.save(s, i); })
+      .method("toString", [](Xml& x){ return x.toString(); })
+      .method("toString", [](Xml& x, const std::string& i){ return x.toString(i); })
+      .method("root", [](Xml& x){ return x.root(); })
+      .method("addRoot", &Xml::addRoot)
+      .method("child", &Xml::child)
+      .method("document", [](Xml& x) -> XmlDocument& { return x.document(); })
+      .method("empty", &Xml::empty)
+      .method("addDeclaration", [](Xml& x){ return x.addDeclaration(); })
+      .method("addDeclaration", [](Xml& x, const std::string& a){ return x.addDeclaration(a); })
+      .method("addDeclaration", [](Xml& x, const std::string& a, const std::string& b){ return x.addDeclaration(a, b); })
+      ;
+
+    mod.method("loadXml", &trussc::loadXml);
+    mod.method("parseXml", &trussc::parseXml);
+
+    // // WORKAROUND
+    // mod.method("get", [](const char* s){
+    //   return std::string(s);
+    // });
+    // mod.method("string", [](const char* s){
+    //   return std::string(s);
+    // });
 
   define_julia_module_trussc_generated(mod);
 }
