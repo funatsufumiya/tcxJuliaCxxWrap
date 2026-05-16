@@ -1111,11 +1111,32 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("drawWireframe", &Mesh::drawWireframe)
     ;
 
-    mod.add_type<std::filesystem::path>("StdFileSystemPath")
+    mod.add_type<std::filesystem::path>("Path")
         .constructor<>()
+        .constructor<const std::string&>()
         .method("c_str", [](std::filesystem::path& p){ return p.c_str(); })
         .method("string", [](std::filesystem::path& p){ return p.string(); })
+        .method("exists", [](std::filesystem::path& p){ return std::filesystem::exists(p); })
+        .method("is_directory", [](std::filesystem::path& p){ return std::filesystem::is_directory(p); })
+        .method("is_dir", [](std::filesystem::path& p){ return std::filesystem::is_directory(p); })
+        .method("is_file", [](std::filesystem::path& p){ return std::filesystem::is_regular_file(p); })
+        .method("is_regular_file", [](std::filesystem::path& p){ return std::filesystem::is_regular_file(p); })
+        .method("is_empty", [](std::filesystem::path& p){ return std::filesystem::is_empty(p); })
+        .method("absolute", [](std::filesystem::path& p){ return std::filesystem::absolute(p); })
+        .method("relative", [](std::filesystem::path& p){ return std::filesystem::relative(p); })
+        .method("relative", [](std::filesystem::path& p, const std::filesystem::path& b){ return std::filesystem::relative(p, b); })
+        .method("div", [](std::filesystem::path& p, const std::filesystem::path& b){ return p / b; })
+        .method("div", [](std::filesystem::path& p, const std::string& b){ return p / b; })
         ;
+
+    mod.method("path", [](const std::string& s){
+      std::filesystem::path p(s);
+      return p;
+    });
+    mod.method("toPath", [](const std::string& s){
+      std::filesystem::path p(s);
+      return p;
+    });
 
     mod.add_enum<TextureFormat>("TextureFormat",
         std::vector<const char*>({
@@ -1182,6 +1203,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("isActive", &Fbo::isActive)
     .method("getTexture", [](Fbo& f) -> Texture& { return f.getTexture(); })
     .method("save", &Fbo::save)
+    .method("save", [](Fbo& f, const std::string& path){ return f.save(path); })
     .method("getColorImage", &Fbo::getColorImage)
     .method("getTextureView", &Fbo::getTextureView)
     .method("getSampler", &Fbo::getSampler)
@@ -1293,8 +1315,10 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
 
   img_type
     .method("load", &Image::load)
+    .method("load", [](Image& img, const std::string& path){ return img.load(path); })
     .method("loadFromMemory", &Image::loadFromMemory)
     .method("save", &Image::save)
+    .method("save", [](Image& img, const std::string& path){ return img.save(path); })
     .method("allocate", [](Image& t, int w, int h){ return t.allocate(w, h); })
     .method("allocate", [](Image& t, int w, int h, int c){ return t.allocate(w, h, c); })
     .method("clear", &Image::clear)
@@ -1333,10 +1357,12 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("copyTo", &Pixels::copyTo)
     .method("clone", &Pixels::clone)
     .method("load", &Pixels::load)
+    .method("load", [](Pixels& p, const std::string& path){ return p.load(path); })
     .method("loadHDR", &Pixels::loadHDR)
     .method("loadPlatform", &Pixels::loadPlatform)
     .method("loadFromMemory", &Pixels::loadFromMemory)
     .method("save", &Pixels::save)
+    .method("save", [](Pixels& p, const std::string& path){ return p.save(path); })
     ;
 
   auto light_type = mod.add_type<Light>("Light")
