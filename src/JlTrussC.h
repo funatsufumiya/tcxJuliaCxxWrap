@@ -12,10 +12,10 @@ void defineTween(jlcxx::Module& mod, std::string name){
     using EaseMode = trussc::EaseMode;
 
     mod.add_type<TweenT>(name)
-        .constructor<>()
-        .constructor<TweenValue, TweenValue, float>()
-        .constructor<TweenValue, TweenValue, float, EaseType>()
-        .constructor<TweenValue, TweenValue, float, EaseType, EaseMode>()
+        .template constructor<>()
+        .template constructor<TweenValue, TweenValue, float>()
+        .template constructor<TweenValue, TweenValue, float, EaseType>()
+        .template constructor<TweenValue, TweenValue, float, EaseType, EaseMode>()
         // FIXME: move constructor?
         .method("from", &TweenT::from)
         .method("to", &TweenT::to)
