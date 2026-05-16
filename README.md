@@ -17,6 +17,8 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 - Fbo, Texture, Image, Pixels, Shader
 - Mesh, Light, Material, EasyCam
 - Json, Xml
+- Path
+- Tween (as TweeFloat, TweenVec2, TweenVec3, TweenColor)
 
 ## Build Instruction
 

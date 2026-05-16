@@ -595,6 +595,13 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     .method("set", [](Rect& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
     .method("set!", [](Rect& v, const Vec2& a, float c, float d){ return v.set(a,c,d); })
     .method("set!", [](Rect& v, float a, float b, float c, float d){ return v.set(a,b,c,d); })
+    .method("getRight", &Rect::getRight)
+    .method("getBottom", &Rect::getBottom)
+    .method("getCenter", &Rect::getCenter)
+    .method("getCenterX", &Rect::getCenterX)
+    .method("getCenterY", &Rect::getCenterY)
+    .method("contains", &Rect::contains)
+    .method("intersects", &Rect::intersects)
     ;
 
   mod.add_type<ColorLinear>("ColorLinear");
@@ -1890,13 +1897,103 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
     mod.method("loadXml", &trussc::loadXml);
     mod.method("parseXml", &trussc::parseXml);
 
-    // // WORKAROUND
-    // mod.method("get", [](const char* s){
-    //   return std::string(s);
-    // });
-    // mod.method("string", [](const char* s){
-    //   return std::string(s);
-    // });
+    mod.add_type<Path>("Path")
+        .constructor<>()
+        .constructor<const std::vector<Vec2>&>()
+        .constructor<const std::vector<Vec3>&>()
+        .constructor<const Path&>()
+        // FIXME: move constructor?
+        .method("addVertex", [](Path& p, float x, float y){ return p.addVertex(x, y); })
+        .method("addVertex", [](Path& p, float x, float y, float z){ return p.addVertex(x, y, z); })
+        .method("addVertex", [](Path& p, const Vec2& v){ return p.addVertex(v); })
+        .method("addVertex", [](Path& p, const Vec3& v){ return p.addVertex(v); })
+        .method("addVertices", [](Path& p, const std::vector<Vec2>& v){ return p.addVertices(v); })
+        .method("addVertices", [](Path& p, const std::vector<Vec3>& v){ return p.addVertices(v); })
+        .method("getVertices", [](Path& p){ return p.getVertices(); })
+        .method("size", &Path::size)
+        .method("empty", &Path::empty)
+        .method("at", [](Path& p, int index){ return p[index]; })
+        .method("clear", &Path::clear)
+        .method("lineTo", [](Path& p, float x, float y){ return p.lineTo(x, y); })
+        .method("lineTo", [](Path& p, float x, float y, float z){ return p.lineTo(x, y, z); })
+        .method("lineTo", [](Path& p, const Vec2& v){ return p.lineTo(v); })
+        .method("lineTo", [](Path& p, const Vec3& v){ return p.lineTo(v); })
+        .method("bezierTo", [](Path& p, const Vec2& a, const Vec2& b, const Vec2& c){ return p.bezierTo(a, b, c); })
+        .method("bezierTo", [](Path& p, const Vec2& a, const Vec2& b, const Vec2& c, int d){ return p.bezierTo(a, b, c, d); })
+        .method("bezierTo", [](Path& p, const Vec3& a, const Vec3& b, const Vec3& c){ return p.bezierTo(a, b, c); })
+        .method("bezierTo", [](Path& p, const Vec3& a, const Vec3& b, const Vec3& c, int d){ return p.bezierTo(a, b, c, d); })
+        .method("bezierTo", [](Path& p,float a,float b,float c,float d,float e,float f){ return p.bezierTo(a,b,c,d,e,f); })
+        .method("bezierTo", [](Path& p,float a,float b,float c,float d,float e,float f,int g){ return p.bezierTo(a,b,c,d,e,f,g); })
+        .method("quadBezierTo", [](Path& p, const Vec2& a, const Vec2& b){ return p.quadBezierTo(a, b); })
+        .method("quadBezierTo", [](Path& p, const Vec2& a, const Vec2& b, int d){ return p.quadBezierTo(a, b, d); })
+        .method("quadBezierTo", [](Path& p, const Vec3& a, const Vec3& b){ return p.quadBezierTo(a, b); })
+        .method("quadBezierTo", [](Path& p, const Vec3& a, const Vec3& b, int d){ return p.quadBezierTo(a, b, d); })
+        .method("quadBezierTo", [](Path& p,float a,float b,float c,float d){ return p.quadBezierTo(a,b,c,d); })
+        .method("quadBezierTo", [](Path& p,float a,float b,float c,float d,int g){ return p.quadBezierTo(a,b,c,d,g); })
+        .method("curveTo", [](Path& p, float x, float y){ return p.curveTo(x, y); })
+        .method("curveTo", [](Path& p, float x, float y, float z){ return p.curveTo(x, y, z); })
+        .method("curveTo", [](Path& p, const Vec2& v){ return p.curveTo(v); })
+        .method("curveTo", [](Path& p, const Vec3& v){ return p.curveTo(v); })
+        .method("arc", [](Path& p, const Vec3& v, float a, float b, float c, float d) { return p.arc(v,a,b,c,d); })
+        .method("arc", [](Path& p, const Vec3& v, float a, float b, float c, float d, bool e) { return p.arc(v,a,b,c,d,e); })
+        .method("arc", [](Path& p, const Vec3& v, float a, float b, float c, float d, bool e, int f) { return p.arc(v,a,b,c,d,e,f); })
+        .method("arc", [](Path& p, const Vec2& v, float a, float b, float c, float d, int f) { return p.arc(v,a,b,c,d,f); })
+        .method("arc", [](Path& p, float a, float b, float c, float d, float e, float f, int g) { return p.arc(a,b,c,d,e,f,g); })
+        .method("arc", [](Path& p, float a, float b, float c, float d, float e, float f) { return p.arc(a,b,c,d,e,f); })
+        .method("close", &Path::close)
+        .method("setClosed", &Path::setClosed)
+        .method("isClosed", &Path::isClosed)
+        .method("draw", &Path::draw)
+        .method("getBounds", &Path::getBounds)
+        .method("getPerimeter", &Path::getPerimeter)
+        ;
+
+  mod.add_enum<EaseType>("EaseType",
+      std::vector<const char*>({
+        "Linear",
+        "Quad",
+        "Cubic",
+        "Quart",
+        "Quint",
+        "Sine",
+        "Expo",
+        "Circ",
+        "Back",
+        "Elastic",
+        "Bounce"
+      }),
+      std::vector<int>({
+          (int)EaseType::Linear,
+          (int)EaseType::Quad,
+          (int)EaseType::Cubic,
+          (int)EaseType::Quart,
+          (int)EaseType::Quint,
+          (int)EaseType::Sine,
+          (int)EaseType::Expo,
+          (int)EaseType::Circ,
+          (int)EaseType::Back,
+          (int)EaseType::Elastic,
+          (int)EaseType::Bounce
+      })
+  );
+
+  mod.add_enum<EaseMode>("EaseMode",
+      std::vector<const char*>({
+          "In",
+          "Out",
+          "InOut",
+      }),
+      std::vector<int>({
+          (int)EaseMode::In,
+          (int)EaseMode::Out,
+          (int)EaseMode::InOut,
+      })
+  );
+
+  defineTween<Tween<float>, float>(mod, "TweenFloat");
+  defineTween<Tween<Vec2>, Vec2>(mod, "TweenVec2");
+  defineTween<Tween<Vec3>, Vec3>(mod, "TweenVec3");
+  defineTween<Tween<Color>, Color>(mod, "TweenColor");
 
   define_julia_module_trussc_generated(mod);
 }
