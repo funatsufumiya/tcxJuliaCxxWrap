@@ -22,7 +22,7 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 
 ## Build Instruction
 
-Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon, then presse `[Update]` to generate project `CMakeLists.txt`.
+Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon, then press `[Update]` to generate project `CMakeLists.txt`.
 
 Project generate once fails on cmake configure, but it's OK at first.
 
