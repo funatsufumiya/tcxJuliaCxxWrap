@@ -26,17 +26,16 @@ Please first add this addon into your `TrussC/addons` folder. Then select "Impor
 
 On cmake configure, you need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx`.
 
+> [!Note]
+> - `-DCMAKE_PREFIX_PATH`: This can be found by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` (or just `~/.julia/artifacts/xxxxxx`) then please set it to `-DCMAKE_PREFIX_PATH=/path/to/libcxxwrap_julia_jll/override`. <br>
+> - `-DJulia_EXECUTABLE`: Julia executable path can be get by `$(which julia)`
+
 ```bash
 # for example, in buildJuliaProject (especially after project generator = trusscli )
 # NOTE: ProjectGenerator (trusscli) cmake configure will fail without parameters below.
 $ cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH=C:/Users/fu/.julia/dev/libcxxwrap_julia_jll/override -DJulia_EXECUTABLE=C:/Users/fu/AppData/Local/Microsoft/WindowsApps/julia.exe
 $ cmake --build build --parallel 8 -j 8 --config Release
 ```
-
-
-> [!Note]
-> - `-DCMAKE_PREFIX_PATH`: This can be found by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` (or just `~/.julia/artifacts/xxxxxx`) then please set it to `-DCMAKE_PREFIX_PATH=/path/to/libcxxwrap_julia_jll/override`. <br>
-> - `-DJulia_EXECUTABLE`: Julia executable path can be get by `$(which julia)`
 
 After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
