@@ -51,7 +51,7 @@ After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` wi
 
 ### In case of Linux -fPIC error
 
-You may need the line below after `add_library(TrussC STATIC ${TC_ALL_SOURCES})` on `TrussC/core/CMakeLists.txt` (maybe line at 120 around.)
+You may need the line below after `add_library(TrussC STATIC ${TC_ALL_SOURCES})` on `TrussC/core/CMakeLists.txt` (maybe [line at 120](https://github.com/TrussC-org/TrussC/blob/ca948f8cbb51b6de47adf61857cee2be6de0974e/core/CMakeLists.txt#L120) around.)
 
 ```cmake
 # Fix error of -fPIC linux dll
