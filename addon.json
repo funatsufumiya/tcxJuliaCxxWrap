@@ -2,5 +2,6 @@
   "description": "TrussC Julia CxxWrap.jl binding generator",
   "author": "Fumiya Funatsu",
   "license": "MIT",
-  "keywords": ["language"]
+  "keywords": ["language"],
+  "dependencies": ["tcxHap", "tcxOsc"]
 }

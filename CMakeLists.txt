@@ -18,6 +18,10 @@ set(SHARED_LIB_NAME JlTrussC)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set_property(TARGET snappy PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+set_property(TARGET tcxHap PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+set_property(TARGET tcxOsc PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+
 # file(GLOB ADDON_INCLUDE_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 file(GLOB ADDON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB ADDON_SOURCES_GENERATED ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/*.cpp)
@@ -59,5 +63,5 @@ if(WIN32 AND MSVC)
     target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
 endif()
 
-target_link_libraries(${ADDON_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
-target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+target_link_libraries(${ADDON_NAME} PUBLIC TrussC tcxHap tcxOsc JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC tcxHap tcxOsc JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
