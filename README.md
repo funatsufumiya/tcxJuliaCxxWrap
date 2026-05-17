@@ -33,6 +33,9 @@ $ cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH=C:/Users
 $ cmake --build build --parallel 8 -j 8 --config Release
 ```
 
+
+NOTE: `-DCMAKE_PREFIX_PATH=xxxx` can be found by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` then please set it to `-DCMAKE_PREFIX_PATH=/path/to/libcxxwrap_julia_jll/override`. Julia executable path can be get by `$(which julia)`
+
 After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` will be generated in the folder (you can search by `fd` command etc, such as `fd -uu .dll$` or `fd -uu .so$` in your folder.)
 
 > [!Warning]
