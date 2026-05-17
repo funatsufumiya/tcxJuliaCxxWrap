@@ -1,4 +1,4 @@
-# tcxJuliaCxxWrap
+# tcxZZJuliaCxxWrap
 
 [TrussC](https://trussc.org/) Julia [CxxWrap.jl](https://github.com/JuliaInterop/CxxWrap.jl) binding generator
 
@@ -7,6 +7,13 @@ This addon is used to create [TrussC.jl](https://github.com/funatsufumiya/TrussC
 ## About
 
 This is not actual addon, but if you add this addon into empty project, `.dll`/`.so`/`.dylib` named JLTrussC (extension is depending on your platform) will be generated.
+
+## What's the name of `ZZ`
+
+`ZZ` makes this addon at the last of other addons.
+This makes build with other addons succeded (when referring other addons in addon `CMakeLists.txt`.)
+
+This is just workaround, even if it seems weird.
 
 ## Binding coverage
 

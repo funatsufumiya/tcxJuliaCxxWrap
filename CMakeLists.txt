@@ -12,7 +12,7 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
 
 message(STATUS "Found JlCxx at ${JlCxx_location}")
 
-set(ADDON_NAME tcxJuliaCxxWrap)
+set(ADDON_NAME tcxZZJuliaCxxWrap)
 set(SHARED_LIB_NAME JlTrussC)
 
 set(CMAKE_CXX_STANDARD 20)
