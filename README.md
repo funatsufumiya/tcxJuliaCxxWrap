@@ -29,14 +29,23 @@ This is just workaround, even if it seems weird.
 
 ## Build Instruction
 
-Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon.
+Please first add this addon into your `TrussC/addons` folder. Then select "Import Existing Project" from `trusscli` (TrussC Project Generator), and choose `buildJuliaProject` of this addon, then press `[Update]` to generate project `CMakeLists.txt`.
 
-On cmake configure, you need to set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx`.
+Project generate once fails on cmake configure, but it's OK at first.
+
+Now, you need manually cmake configure, and please set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx` properly.
+
+> [!Note]
+> - `-DCMAKE_PREFIX_PATH`: This can be get by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` (or just `~/.julia/artifacts/xxxxxx`). <br>
+> - `-DJulia_EXECUTABLE`: Julia executable path can be get by `$(which julia)`
 
 ```bash
 # for example, in buildJuliaProject (especially after project generator = trusscli )
 # NOTE: ProjectGenerator (trusscli) cmake configure will fail without parameters below.
-$ cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_PREFIX_PATH=C:/Users/fu/.julia/dev/libcxxwrap_julia_jll/override -DJulia_EXECUTABLE=C:/Users/fu/AppData/Local/Microsoft/WindowsApps/julia.exe
+$ cmake -B build \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -DCMAKE_PREFIX_PATH=C:/Users/fu/.julia/dev/libcxxwrap_julia_jll/override \
+    -DJulia_EXECUTABLE=C:/Users/fu/AppData/Local/Microsoft/WindowsApps/julia.exe
 $ cmake --build build --parallel 8 -j 8 --config Release
 ```
 
@@ -51,7 +60,7 @@ After cmake build, `libJlTrussC.dll` / `libJlTrussC.so` / `libJlTrussC.dylib` wi
 
 ### In case of Linux -fPIC error
 
-You may need the line below after `add_library(TrussC STATIC ${TC_ALL_SOURCES})` on `TrussC/core/CMakeLists.txt` (maybe line at 120 around.)
+You may need the line below after `add_library(TrussC STATIC ${TC_ALL_SOURCES})` on `TrussC/core/CMakeLists.txt` (maybe [line at 120](https://github.com/TrussC-org/TrussC/blob/ca948f8cbb51b6de47adf61857cee2be6de0974e/core/CMakeLists.txt#L120) around.)
 
 ```cmake
 # Fix error of -fPIC linux dll
