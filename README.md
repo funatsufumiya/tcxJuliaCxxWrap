@@ -26,7 +26,7 @@ Please first add this addon into your `TrussC/addons` folder. Then select "Impor
 
 Project generate once fails on cmake configure, but it's OK at first.
 
-Now, you need manually cmake configure, and please set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx`.
+Now, you need manually cmake configure, and please set `-DCMAKE_PREFIX_PATH` and `-DJulia_EXECUTABLE` in order to build `JlCxx` properly.
 
 > [!Note]
 > - `-DCMAKE_PREFIX_PATH`: This can be get by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` (or just `~/.julia/artifacts/xxxxxx`). <br>
