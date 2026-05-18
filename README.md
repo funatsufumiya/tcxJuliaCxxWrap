@@ -26,6 +26,7 @@ This is just workaround, even if it seems weird. (Probably, there may be better 
 - Json, Xml
 - Path, Font
 - Tween (as TweeFloat, TweenVec2, TweenVec3, TweenColor)
+- Sound
 
 ## Build Instruction
 
