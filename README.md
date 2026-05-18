@@ -13,7 +13,7 @@ This is not actual addon, but if you add this addon into empty project, `.dll`/`
 `ZZ` makes this addon at the last place in build order among other addons.
 This makes build with other addons succeded (when referring other addons in addon `CMakeLists.txt`.)
 
-This is just workaround, even if it seems weird. (Probably, there may be better ways such as use Project instead addon style.)
+This is just workaround, even if it seems weird. (Probably, there may be better ways such as using Project style instead addon style.)
 
 ## Binding coverage
 
