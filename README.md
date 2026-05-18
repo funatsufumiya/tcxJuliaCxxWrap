@@ -38,7 +38,7 @@ Now, you need manually cmake configure, and please set `-DCMAKE_PREFIX_PATH` and
 
 > [!Note]
 > - `-DCMAKE_PREFIX_PATH`: This can be get by `julia --project=@. -e 'using CxxWrap; print(CxxWrap.prefix_path())'`. This command prints the `/path/to/libcxxwrap_julia_jll/override` (or just `~/.julia/artifacts/xxxxxx`). <br>
-> - `-DJulia_EXECUTABLE`: Julia executable path can be get by `$(which julia)`
+> - `-DJulia_EXECUTABLE`: Julia executable path can be get by `$(which julia)` or `where.exe julia`
 
 ```bash
 # for example, in buildJuliaProject (especially after project generator = trusscli )
