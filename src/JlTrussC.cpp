@@ -2026,6 +2026,32 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   defineTween<Tween<Vec3>, Vec3>(mod, "TweenVec3");
   defineTween<Tween<Color>, Color>(mod, "TweenColor");
 
+  mod.add_type<PlayingSound>("PlayingSound")
+      .constructor<>()
+
+      // FIXME: need std::atomic treatments
+
+      // .method("buffer", [](PlayingSound& p){ return p.buffer; })
+      // .method("volume", [](PlayingSound& p){ return p.volume; })
+      // .method("pan", [](PlayingSound& p){ return p.pan; })
+      // .method("speed", [](PlayingSound& p){ return p.speed; })
+      // .method("loop", [](PlayingSound& p){ return p.loop; })
+      // .method("playing", [](PlayingSound& p){ return p.playing; })
+      // .method("paused", [](PlayingSound& p){ return p.paused; })
+      // .method("positionF", [](PlayingSound& p){ return p.positionF; })
+      // .method("rateRatio", [](PlayingSound& p){ return p.rateRatio; })
+      // .method("buffer!", [](PlayingSound& p, std::shared_ptr<SoundBuffer> v){ p.buffer = v; })
+      // .method("volume!", [](PlayingSound& p, float v){ p.volume = v; })
+      // .method("pan!", [](PlayingSound& p, float v){ p.pan = v; })
+      // .method("speed!", [](PlayingSound& p, float v){ p.speed = v; })
+      // .method("loop!", [](PlayingSound& p, bool v){ p.loop = v; })
+      // .method("playing!", [](PlayingSound& p, bool v){ p.playing = v; })
+      // .method("paused!", [](PlayingSound& p, bool v){ p.paused = v; })
+      // .method("positionF!", [](PlayingSound& p, double v){ p.positionF = v; })
+      // .method("positionF!", [](PlayingSound& p, float v){ p.positionF = v; })
+      // .method("rateRatio!", [](PlayingSound& p, float v){ p.rateRatio = v; })
+      ;
+
   mod.add_type<SoundBuffer>("SoundBuffer")
       .constructor<>()
       .constructor<const SoundBuffer&>()
