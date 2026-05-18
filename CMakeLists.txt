@@ -23,53 +23,40 @@ set_property(TARGET tcxHap PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 set_property(TARGET tcxOsc PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
 # file(GLOB ADDON_INCLUDE_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-file(GLOB ADDON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB ADDON_SOURCES_FOR_SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB ADDON_SOURCES_GENERATED ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/*.cpp)
-file(GLOB ADDON_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
+file(GLOB ADDON_HEADERS_FOR_SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 file(GLOB ADDON_HEADERS_GENERATED ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 
-add_library(${ADDON_NAME} SHARED
+# NOTE: this is dummy sources for compilation
+file(GLOB ADDON_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src_dummy/*.h)
+file(GLOB ADDON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src_dummy/*.cpp)
+
+# NOTE: this lib is dummy for compilation
+add_library(${ADDON_NAME} STATIC
     ${ADDON_SOURCES}
-    ${ADDON_SOURCES_GENERATED}
     ${ADDON_HEADERS}
+)
+
+add_library(${SHARED_LIB_NAME} SHARED
+    ${ADDON_SOURCES_FOR_SHARED}
+    ${ADDON_SOURCES_GENERATED}
+    ${ADDON_HEADERS_FOR_SHARED}
     ${ADDON_HEADERS_GENERATED}
 )
 
-# add_library(${SHARED_LIB_NAME} SHARED
-#     ${ADDON_SOURCES}
-#     ${ADDON_SOURCES_GENERATED}
-#     ${ADDON_HEADERS}
-#     ${ADDON_HEADERS_GENERATED}
-# )
-
-# target_compile_definitions(${ADDON_NAME} PRIVATE A=1 B=1)
-target_include_directories(${ADDON_NAME} PUBLIC
+# target_compile_definitions(${SHARED_LIB_NAME} PRIVATE A=1 B=1)
+target_include_directories(${SHARED_LIB_NAME} PUBLIC
     # ${CMAKE_CURRENT_SOURCE_DIR}/other/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/generated
 )
 
-# # target_compile_definitions(${SHARED_LIB_NAME} PRIVATE A=1 B=1)
-# target_include_directories(${SHARED_LIB_NAME} PUBLIC
-#     # ${CMAKE_CURRENT_SOURCE_DIR}/other/include
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src/generated
-# )
-
 if(WIN32 AND MSVC)
     # MSVC on Windows: enable large object support to avoid
     # "too many sections" (/bigobj)
-    target_compile_options(${ADDON_NAME} PRIVATE /bigobj)
-    # target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
+    target_compile_options(${SHARED_LIB_NAME} PRIVATE /bigobj)
 endif()
 
-target_link_libraries(${ADDON_NAME} PUBLIC TrussC tcxHap tcxOsc JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
-# target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC tcxHap tcxOsc JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
-
-add_custom_command(
-  TARGET ${ADDON_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy
-    $<TARGET_FILE:${ADDON_NAME}>
-    $<TARGET_FILE_DIR:${ADDON_NAME}>/${CMAKE_SHARED_LIBRARY_PREFIX}${SHARED_LIB_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}
-  COMMENT "Copying build artifact to ${SHARED_LIB_NAME}"
-)
+target_link_libraries(${ADDON_NAME} PUBLIC TrussC)
+target_link_libraries(${SHARED_LIB_NAME} PUBLIC TrussC tcxHap tcxOsc JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
