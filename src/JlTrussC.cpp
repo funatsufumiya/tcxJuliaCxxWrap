@@ -1,7 +1,7 @@
 #define TRUSSC_SHOW_CONSOLE 1
 #include "TrussC.h"
-#include "tcxHapPlayer.h"
-#include "tcxOsc.h"
+// #include "tcxHapPlayer.h"
+// #include "tcxOsc.h"
 
 #include "JlTrussC.h"
 
@@ -2127,176 +2127,176 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
       .method("onAudioData", &MicInput::onAudioData)
       ;
 
-  // tcxOsc
-  mod.add_type<OscMessage>("OscMessage")
-      .constructor<>()
-      .constructor<const OscMessage&>()
-      .constructor<const std::string&>()
-      .method("setAddress", &OscMessage::setAddress)
-      .method("getAddress", &OscMessage::getAddress)
-      .method("addInt", &OscMessage::addInt)
-      .method("addFloat", &OscMessage::addFloat)
-      .method("addString", &OscMessage::addString)
-      .method("addBlob", &OscMessage::addBlob)
-      .method("addBool", &OscMessage::addBool)
-      .method("getArgCount", &OscMessage::getArgCount)
-      .method("getTypeTags", &OscMessage::getTypeTags)
-      .method("getArgAsInt", &OscMessage::getArgAsInt)
-      .method("getArgAsFloat", &OscMessage::getArgAsFloat)
-      .method("getArgAsString", &OscMessage::getArgAsString)
-      .method("getArgAsBlob", &OscMessage::getArgAsBlob)
-      .method("getArgAsBool", &OscMessage::getArgAsBool)
-      .method("toBytes", &OscMessage::toBytes)
-      .method("toString", &OscMessage::toString)
-      .method("clear", &OscMessage::clear)
-      ;
+//   // tcxOsc
+//   mod.add_type<OscMessage>("OscMessage")
+//       .constructor<>()
+//       .constructor<const OscMessage&>()
+//       .constructor<const std::string&>()
+//       .method("setAddress", &OscMessage::setAddress)
+//       .method("getAddress", &OscMessage::getAddress)
+//       .method("addInt", &OscMessage::addInt)
+//       .method("addFloat", &OscMessage::addFloat)
+//       .method("addString", &OscMessage::addString)
+//       .method("addBlob", &OscMessage::addBlob)
+//       .method("addBool", &OscMessage::addBool)
+//       .method("getArgCount", &OscMessage::getArgCount)
+//       .method("getTypeTags", &OscMessage::getTypeTags)
+//       .method("getArgAsInt", &OscMessage::getArgAsInt)
+//       .method("getArgAsFloat", &OscMessage::getArgAsFloat)
+//       .method("getArgAsString", &OscMessage::getArgAsString)
+//       .method("getArgAsBlob", &OscMessage::getArgAsBlob)
+//       .method("getArgAsBool", &OscMessage::getArgAsBool)
+//       .method("toBytes", &OscMessage::toBytes)
+//       .method("toString", &OscMessage::toString)
+//       .method("clear", &OscMessage::clear)
+//       ;
 
-  mod.method("OscMessage_fromBytes", &OscMessage::fromBytes);
+//   mod.method("OscMessage_fromBytes", &OscMessage::fromBytes);
 
-  mod.add_type<OscBundle>("OscBundle")
-      .constructor<>()
-      .constructor<const OscBundle&>()
-      .constructor<uint64_t>()
-      .method("setTimetag", &OscBundle::setTimetag)
-      .method("getTimetag", &OscBundle::getTimetag)
-      .method("addMessage", &OscBundle::addMessage)
-      .method("addBundle", &OscBundle::addBundle)
-      .method("getElementCount", &OscBundle::getElementCount)
-      .method("isBundle", &OscBundle::isBundle)
-      .method("isMessage", &OscBundle::isMessage)
-      .method("getMessageAt", &OscBundle::getMessageAt)
-      .method("getBundleAt", &OscBundle::getBundleAt)
-      .method("toBytes", &OscBundle::toBytes)
-      .method("clear", &OscBundle::clear)
-      ;
+//   mod.add_type<OscBundle>("OscBundle")
+//       .constructor<>()
+//       .constructor<const OscBundle&>()
+//       .constructor<uint64_t>()
+//       .method("setTimetag", &OscBundle::setTimetag)
+//       .method("getTimetag", &OscBundle::getTimetag)
+//       .method("addMessage", &OscBundle::addMessage)
+//       .method("addBundle", &OscBundle::addBundle)
+//       .method("getElementCount", &OscBundle::getElementCount)
+//       .method("isBundle", &OscBundle::isBundle)
+//       .method("isMessage", &OscBundle::isMessage)
+//       .method("getMessageAt", &OscBundle::getMessageAt)
+//       .method("getBundleAt", &OscBundle::getBundleAt)
+//       .method("toBytes", &OscBundle::toBytes)
+//       .method("clear", &OscBundle::clear)
+//       ;
 
-  mod.method("OscBundle_fromBytes", &OscBundle::fromBytes);
-  mod.method("OscBundle_isBundle", &OscBundle::isBundle);
+//   mod.method("OscBundle_fromBytes", &OscBundle::fromBytes);
+//   mod.method("OscBundle_isBundle", &OscBundle::isBundle);
 
-  using OscSenderDestination = OscSender::Destination;
-  mod.add_type<OscSenderDestination>("OscSenderDestination")
-      .constructor<>()
-      .method("host", [](OscSenderDestination& d){ return d.host; })
-      .method("host!", [](OscSenderDestination& d, const std::string& h){ return d.host = h; })
-      .method("port", [](OscSenderDestination& d){ return d.port; })
-      .method("port!", [](OscSenderDestination& d, int p){ return d.port = p; })
-      ;
+//   using OscSenderDestination = OscSender::Destination;
+//   mod.add_type<OscSenderDestination>("OscSenderDestination")
+//       .constructor<>()
+//       .method("host", [](OscSenderDestination& d){ return d.host; })
+//       .method("host!", [](OscSenderDestination& d, const std::string& h){ return d.host = h; })
+//       .method("port", [](OscSenderDestination& d){ return d.port; })
+//       .method("port!", [](OscSenderDestination& d, int p){ return d.port = p; })
+//       ;
 
-  mod.add_type<OscSender>("OscSender")
-      .constructor<>()
-      .method("connect", &OscSender::connect)
-      .method("disconnect", [](OscSender& o){ o.disconnect(); })
-      .method("disconnect", [](OscSender& o, const std::string& h, int p){ o.disconnect(h, p); })
-      .method("setup", &OscSender::setup)
-      .method("close", &OscSender::close)
-      .method("send", [](OscSender& o, const OscMessage& m){ o.send(m); })
-      .method("send", [](OscSender& o, const OscBundle& b){ o.send(b); })
-      .method("sendTo", [](OscSender& o, const std::string& h, int p, const OscMessage& m){ o.sendTo(h,p,m); })
-      .method("sendTo", [](OscSender& o, const std::string& h, int p, const OscBundle& b){ o.sendTo(h,p,b); })
-      .method("getConnectedAddresses", &OscSender::getConnectedAddresses)
-      .method("isConnected", &OscSender::isConnected)
-      ;
+//   mod.add_type<OscSender>("OscSender")
+//       .constructor<>()
+//       .method("connect", &OscSender::connect)
+//       .method("disconnect", [](OscSender& o){ o.disconnect(); })
+//       .method("disconnect", [](OscSender& o, const std::string& h, int p){ o.disconnect(h, p); })
+//       .method("setup", &OscSender::setup)
+//       .method("close", &OscSender::close)
+//       .method("send", [](OscSender& o, const OscMessage& m){ o.send(m); })
+//       .method("send", [](OscSender& o, const OscBundle& b){ o.send(b); })
+//       .method("sendTo", [](OscSender& o, const std::string& h, int p, const OscMessage& m){ o.sendTo(h,p,m); })
+//       .method("sendTo", [](OscSender& o, const std::string& h, int p, const OscBundle& b){ o.sendTo(h,p,b); })
+//       .method("getConnectedAddresses", &OscSender::getConnectedAddresses)
+//       .method("isConnected", &OscSender::isConnected)
+//       ;
 
-  mod.add_type<OscReceiver>("OscReceiver")
-      .constructor<>()
-      .method("setup", &OscReceiver::setup)
-      .method("close", &OscReceiver::close)
-      .method("getPort", &OscReceiver::getPort)
-      .method("isListening", &OscReceiver::isListening)
-      .method("hasNewMessage", &OscReceiver::hasNewMessage)
-      .method("getNextMessage", &OscReceiver::getNextMessage)
-      .method("setBufferSize", &OscReceiver::setBufferSize)
-      .method("getBufferSize", &OscReceiver::getBufferSize)
-      ;
-  // End of tcxOsc
+//   mod.add_type<OscReceiver>("OscReceiver")
+//       .constructor<>()
+//       .method("setup", &OscReceiver::setup)
+//       .method("close", &OscReceiver::close)
+//       .method("getPort", &OscReceiver::getPort)
+//       .method("isListening", &OscReceiver::isListening)
+//       .method("hasNewMessage", &OscReceiver::hasNewMessage)
+//       .method("getNextMessage", &OscReceiver::getNextMessage)
+//       .method("setBufferSize", &OscReceiver::setBufferSize)
+//       .method("getBufferSize", &OscReceiver::getBufferSize)
+//       ;
+//   // End of tcxOsc
 
-  // tcxHap
-  using HapFormat = tcx::hap::HapFormat;
-  using HapPlayer = tcx::hap::HapPlayer;
+//   // tcxHap
+//   using HapFormat = tcx::hap::HapFormat;
+//   using HapPlayer = tcx::hap::HapPlayer;
 
-  mod.add_enum<HapFormat>("HapFormat",
-      std::vector<const char*>({
-          "Unknown",
-          "DXT1",
-          "DXT5",
-          "YCoCgDXT5",
-          "BC7",
-          "RGTC1"
-      }),
-      std::vector<int>({
-          (int)HapFormat::Unknown,
-          (int)HapFormat::DXT1,
-          (int)HapFormat::DXT5,
-          (int)HapFormat::YCoCgDXT5,
-          (int)HapFormat::BC7,
-          (int)HapFormat::RGTC1
-      })
-  );
+//   mod.add_enum<HapFormat>("HapFormat",
+//       std::vector<const char*>({
+//           "Unknown",
+//           "DXT1",
+//           "DXT5",
+//           "YCoCgDXT5",
+//           "BC7",
+//           "RGTC1"
+//       }),
+//       std::vector<int>({
+//           (int)HapFormat::Unknown,
+//           (int)HapFormat::DXT1,
+//           (int)HapFormat::DXT5,
+//           (int)HapFormat::YCoCgDXT5,
+//           (int)HapFormat::BC7,
+//           (int)HapFormat::RGTC1
+//       })
+//   );
 
-  mod.add_type<HapPlayer>("HapPlayer")
-      .constructor<>()
-      // FIXME: move constructor?
-      .method("getDecodeTimeMs", &HapPlayer::getDecodeTimeMs)
-      .method("getChunkCount", &HapPlayer::getChunkCount)
-      .method("resetStats", &HapPlayer::resetStats)
-      .method("getHapFormat", &HapPlayer::getHapFormat)
-      // .method("setSpeed", &HapPlayer::setSpeed)
-      // .method("isHapFile", &HapPlayer::isHapFile)
-      .method("load", &HapPlayer::load)
-      .method("close", &HapPlayer::close)
-      .method("hasTexture", &HapPlayer::hasTexture)
-      .method("draw", [](HapPlayer& p, float x, float y){ return p.draw(x, y); })
-      .method("draw", [](HapPlayer& p, float x, float y, float w, float h){ return p.draw(x, y, w, h); })
-      .method("isLoaded", &HapPlayer::isLoaded)
-      .method("play", &HapPlayer::play)
-      .method("stop", &HapPlayer::stop)
-      .method("setPaused", &HapPlayer::setPaused)
-      .method("togglePause", &HapPlayer::togglePause)
-      .method("update", &HapPlayer::update)
-      .method("isPlaying", &HapPlayer::isPlaying)
-      .method("isPaused", &HapPlayer::isPaused)
-      .method("isFrameNew", &HapPlayer::isFrameNew)
-      .method("isDone", &HapPlayer::isDone)
-      .method("getWidth", &HapPlayer::getWidth)
-      .method("getHeight", &HapPlayer::getHeight)
-      .method("getDuration", &HapPlayer::getDuration)
-      .method("getPosition", &HapPlayer::getPosition)
-      .method("setPosition", &HapPlayer::setPosition)
-      .method("getCurrentTime", &HapPlayer::getCurrentTime)
-      .method("setCurrentTime", &HapPlayer::setCurrentTime)
-      .method("getVolume", &HapPlayer::getVolume)
-      .method("setVolume", &HapPlayer::setVolume)
-      .method("getSpeed", &HapPlayer::getSpeed)
-      .method("setSpeed", &HapPlayer::setSpeed)
-      .method("setPan", &HapPlayer::setPan)
-      .method("getPan", &HapPlayer::getPan)
-      .method("setLoop", &HapPlayer::setLoop)
-      .method("isLoop", &HapPlayer::isLoop)
-      .method("getCurrentFrame", &HapPlayer::getCurrentFrame)
-      .method("getTotalFrames", &HapPlayer::getTotalFrames)
-      .method("setFrame", &HapPlayer::setFrame)
-      .method("nextFrame", &HapPlayer::nextFrame)
-      .method("previousFrame", &HapPlayer::previousFrame)
-      .method("getPixels", [](HapPlayer& p){ return p.getPixels(); })
-      .method("hasAudio", &HapPlayer::hasAudio)
-      .method("getAudioCodec", &HapPlayer::getAudioCodec)
-      .method("getAudioData", &HapPlayer::getAudioData)
-      .method("getAudioSampleRate", &HapPlayer::getAudioSampleRate)
-      .method("getAudioChannels", &HapPlayer::getAudioChannels)
-      .method("isUsingHwAccel", &HapPlayer::isUsingHwAccel)
-      .method("getHwAccelName", &HapPlayer::getHwAccelName)
-      .method("setResyncThreshold", &HapPlayer::setResyncThreshold)
-      .method("getResyncThreshold", &HapPlayer::getResyncThreshold)
-      // .method("getTexture", &HapPlayer::getTexture)
-      // WORKAROUND
-      .method("getTexturePtr", [](HapPlayer& p){ 
-          Texture& tex = p.getTexture();
-          return (void*) &tex;
-      })
-      ;
+//   mod.add_type<HapPlayer>("HapPlayer")
+//       .constructor<>()
+//       // FIXME: move constructor?
+//       .method("getDecodeTimeMs", &HapPlayer::getDecodeTimeMs)
+//       .method("getChunkCount", &HapPlayer::getChunkCount)
+//       .method("resetStats", &HapPlayer::resetStats)
+//       .method("getHapFormat", &HapPlayer::getHapFormat)
+//       // .method("setSpeed", &HapPlayer::setSpeed)
+//       // .method("isHapFile", &HapPlayer::isHapFile)
+//       .method("load", &HapPlayer::load)
+//       .method("close", &HapPlayer::close)
+//       .method("hasTexture", &HapPlayer::hasTexture)
+//       .method("draw", [](HapPlayer& p, float x, float y){ return p.draw(x, y); })
+//       .method("draw", [](HapPlayer& p, float x, float y, float w, float h){ return p.draw(x, y, w, h); })
+//       .method("isLoaded", &HapPlayer::isLoaded)
+//       .method("play", &HapPlayer::play)
+//       .method("stop", &HapPlayer::stop)
+//       .method("setPaused", &HapPlayer::setPaused)
+//       .method("togglePause", &HapPlayer::togglePause)
+//       .method("update", &HapPlayer::update)
+//       .method("isPlaying", &HapPlayer::isPlaying)
+//       .method("isPaused", &HapPlayer::isPaused)
+//       .method("isFrameNew", &HapPlayer::isFrameNew)
+//       .method("isDone", &HapPlayer::isDone)
+//       .method("getWidth", &HapPlayer::getWidth)
+//       .method("getHeight", &HapPlayer::getHeight)
+//       .method("getDuration", &HapPlayer::getDuration)
+//       .method("getPosition", &HapPlayer::getPosition)
+//       .method("setPosition", &HapPlayer::setPosition)
+//       .method("getCurrentTime", &HapPlayer::getCurrentTime)
+//       .method("setCurrentTime", &HapPlayer::setCurrentTime)
+//       .method("getVolume", &HapPlayer::getVolume)
+//       .method("setVolume", &HapPlayer::setVolume)
+//       .method("getSpeed", &HapPlayer::getSpeed)
+//       .method("setSpeed", &HapPlayer::setSpeed)
+//       .method("setPan", &HapPlayer::setPan)
+//       .method("getPan", &HapPlayer::getPan)
+//       .method("setLoop", &HapPlayer::setLoop)
+//       .method("isLoop", &HapPlayer::isLoop)
+//       .method("getCurrentFrame", &HapPlayer::getCurrentFrame)
+//       .method("getTotalFrames", &HapPlayer::getTotalFrames)
+//       .method("setFrame", &HapPlayer::setFrame)
+//       .method("nextFrame", &HapPlayer::nextFrame)
+//       .method("previousFrame", &HapPlayer::previousFrame)
+//       .method("getPixels", [](HapPlayer& p){ return p.getPixels(); })
+//       .method("hasAudio", &HapPlayer::hasAudio)
+//       .method("getAudioCodec", &HapPlayer::getAudioCodec)
+//       .method("getAudioData", &HapPlayer::getAudioData)
+//       .method("getAudioSampleRate", &HapPlayer::getAudioSampleRate)
+//       .method("getAudioChannels", &HapPlayer::getAudioChannels)
+//       .method("isUsingHwAccel", &HapPlayer::isUsingHwAccel)
+//       .method("getHwAccelName", &HapPlayer::getHwAccelName)
+//       .method("setResyncThreshold", &HapPlayer::setResyncThreshold)
+//       .method("getResyncThreshold", &HapPlayer::getResyncThreshold)
+//       // .method("getTexture", &HapPlayer::getTexture)
+//       // WORKAROUND
+//       .method("getTexturePtr", [](HapPlayer& p){ 
+//           Texture& tex = p.getTexture();
+//           return (void*) &tex;
+//       })
+//       ;
 
-  mod.method("HapPlayer_isHapFile", &HapPlayer::isHapFile);
-  // End of tcxHap
+//   mod.method("HapPlayer_isHapFile", &HapPlayer::isHapFile);
+//   // End of tcxHap
 
   define_julia_module_trussc_generated(mod);
 }
