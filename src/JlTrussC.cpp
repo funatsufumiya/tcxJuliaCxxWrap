@@ -2026,6 +2026,81 @@ JLCXX_MODULE define_julia_module(jlcxx::Module& mod)
   defineTween<Tween<Vec3>, Vec3>(mod, "TweenVec3");
   defineTween<Tween<Color>, Color>(mod, "TweenColor");
 
+  mod.add_type<SoundBuffer>("SoundBuffer")
+      .constructor<>()
+      .constructor<const SoundBuffer&>()
+      // FIXME: move constructor
+      .method("loadOgg", &SoundBuffer::loadOgg)
+      .method("loadWav", &SoundBuffer::loadWav)
+      .method("loadMp3", &SoundBuffer::loadMp3)
+      .method("loadMp3FromMemory", &SoundBuffer::loadMp3FromMemory)
+      .method("loadAac", &SoundBuffer::loadAac)
+      .method("loadAacFromMemory", &SoundBuffer::loadAacFromMemory)
+      .method("loadPcmFromMemory", &SoundBuffer::loadPcmFromMemory)
+      .method("getDuration", &SoundBuffer::getDuration)
+      .method("generateSineWave", &SoundBuffer::generateSineWave)
+      .method("generateSquareWave", &SoundBuffer::generateSquareWave)
+      .method("generateTriangleWave", &SoundBuffer::generateTriangleWave)
+      .method("generateSawtoothWave", &SoundBuffer::generateSawtoothWave)
+      .method("generateNoise", &SoundBuffer::generateNoise)
+      .method("generatePinkNoise", &SoundBuffer::generatePinkNoise)
+      .method("generateSilence", &SoundBuffer::generateSilence)
+      .method("applyADSR", &SoundBuffer::applyADSR)
+      .method("mixFrom", &SoundBuffer::mixFrom)
+      .method("clip", &SoundBuffer::clip)
+      ;
+
+  mod.method("getAdtsSampleRateIndex", &SoundBuffer::getAdtsSampleRateIndex);
+  mod.method("createAdtsHeader", &SoundBuffer::createAdtsHeader);
+
+  mod.add_type<AudioEngine>("AudioEngine")
+      .method("init", &AudioEngine::init)
+      .method("shutdown", &AudioEngine::shutdown)
+      .method("getAnalysisBuffer", &AudioEngine::getAnalysisBuffer)
+      .method("play", &AudioEngine::play)
+      .method("mixAudio", &AudioEngine::mixAudio)
+      ;
+
+  mod.method("AudioEngine_getInstance", &AudioEngine::getInstance);
+
+  mod.add_type<Sound>("Sound")
+      .constructor<>()
+      .constructor<const Sound&>()
+      // FIXME: move constructor
+      .method("load", &Sound::load)
+      .method("loadTestTone", &Sound::loadTestTone)
+      .method("loadFromBuffer", [](Sound& s, const SoundBuffer& b){ s.loadFromBuffer(b); })
+      .method("loadFromBuffer", [](Sound& s, std::shared_ptr<SoundBuffer> b){ s.loadFromBuffer(b); })
+      .method("isLoaded", &Sound::isLoaded)
+      .method("play", &Sound::play)
+      .method("stop", &Sound::stop)
+      .method("pause", &Sound::pause)
+      .method("resume", &Sound::resume)
+      .method("setVolume", &Sound::setVolume)
+      .method("getVolume", &Sound::getVolume)
+      .method("setLoop", &Sound::setLoop)
+      .method("isLoop", &Sound::isLoop)
+      .method("setPan", &Sound::setPan)
+      .method("getPan", &Sound::getPan)
+      .method("setSpeed", &Sound::setSpeed)
+      .method("getSpeed", &Sound::getSpeed)
+      .method("isPlaying", &Sound::isPlaying)
+      .method("isPaused", &Sound::isPaused)
+      .method("getPosition", &Sound::getPosition)
+      .method("setPosition", &Sound::setPosition)
+      .method("getDuration", &Sound::getDuration)
+      ;
+
+  mod.add_type<MicInput>("MicInput")
+      .constructor<>()
+      .method("start", &MicInput::start)
+      .method("stop", &MicInput::stop)
+      .method("getBuffer", &MicInput::getBuffer)
+      .method("isRunning", &MicInput::isRunning)
+      .method("getSampleRate", &MicInput::getSampleRate)
+      .method("onAudioData", &MicInput::onAudioData)
+      ;
+
   // tcxOsc
   mod.add_type<OscMessage>("OscMessage")
       .constructor<>()
